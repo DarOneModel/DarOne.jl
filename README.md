@@ -66,7 +66,7 @@ See instructions in the documentation: https://daronemodel.github.io/DarOne.jl/b
 DarOne automatically downloads the pinned Darwin3 and `dar_one_config`
 revisions in [`darwin-sources.env`](darwin-sources.env) on first use. Sources
 are cached separately from writable build and experiment directories. Building
-requires Git, GNU Fortran, `make`, NetCDF and Python.
+requires Git, GNU Fortran, `make`, NetCDF and Python 3.11 for the pinned Darwin3 revision.
 
 ```julia
 using DarOne

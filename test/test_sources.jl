@@ -34,6 +34,15 @@ end
                     @test isfile(joinpath(source, "tools", "genmake2"))
                     @test isfile(joinpath(staged, "code", "SIZE.h"))
                     @test source == darwin_root() && staged == configuration_root()
+                    # genmake2 may generate files in its source tree; rebuilding
+                    # must leave the pinned checkout unchanged.
+                    DarOne._with_build_source(base_configuration) do writable
+                        write(joinpath(writable, "generated.F"), "")
+                    end
+                    @test !isfile(joinpath(source, "generated.F"))
+                    DarOne._with_build_source(base_configuration) do writable
+                        @test !isfile(joinpath(writable, "generated.F"))
+                    end
                     write(joinpath(staged, "code", "SIZE.h"), "modified\n")
                     @test read(joinpath(DarOne._source_checkout(:config, config_rev),
                                         "code", "SIZE.h"), String) == "original\n"

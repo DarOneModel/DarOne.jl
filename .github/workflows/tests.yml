@@ -31,10 +31,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gfortran make libnetcdf-dev libnetcdff-dev tcsh
 
-      # Exercise the legacy Cog compatibility adapter with Python 3.12+.
+      # The pinned Darwin3 revision bundles Cog that requires Python 3.11.
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: '3.11'
 
       - uses: julia-actions/setup-julia@v3
         with:
