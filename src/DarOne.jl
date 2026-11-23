@@ -3,7 +3,7 @@ module DarOne
 # using Dates, Printf, SparseArrays, Artifacts, LazyArtifacts, UUIDs, Suppressor
 # using OrderedCollections, DataFrames, NetCDF, MeshArrays, ClimateModels
 
-using OrderedCollections, Printf, Suppressor, ClimateModels, DelimitedFiles
+using OrderedCollections, Printf, Suppressor, ClimateModels, DelimitedFiles, Preferences
 
 include("Types.jl")
 include("Sources.jl")
@@ -16,6 +16,7 @@ include("GridBinHelpers.jl")
 
 export MITgcm_path, base_configuration, filexe
 export darwin_root, configuration_root, executable_path, source_revisions
+export set_darwin_path, set_config_path
 
 # Types 
 export MITgcm_config, MITgcm_namelist

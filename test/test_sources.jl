@@ -1,4 +1,4 @@
-using Test, DarOne, Scratch
+using Test, DarOne, Scratch, Pkg
 
 function fixture_commit(dir, files)
     mkpath(dir)
@@ -22,6 +22,29 @@ end
             config_rev = fixture_commit(config, ["code/SIZE.h" => "original\n",
                                                   "code/darwin_plankton.F" => "plankton\n",
                                                   "input/data" => "&PARM01\n/\n"])
+            # Verify that a configured source path persists in the active Julia environment.
+            prefs = joinpath(root, "environment")
+            mkpath(prefs)
+            write(joinpath(prefs, "Project.toml"),
+                  "[deps]\nDarOne = \"68a5c792-066c-4fa4-bf39-3229eee150df\"\n")
+            original_project = Base.active_project()
+            try
+                Pkg.activate(prefs; io=devnull)
+                withenv("DARONE_MITGCM_PATH" => nothing, "DARONE_CONFIG_PATH" => nothing,
+                        "DARONE_DARWIN_REV" => revision, "DARONE_CONFIG_REV" => config_rev) do
+                    set_darwin_path(darwin)
+                    set_config_path(config)
+                    @test darwin_root() == darwin
+                    @test configuration_root() == config
+                    @test isfile(joinpath(prefs, "LocalPreferences.toml"))
+                    @test_throws ArgumentError set_config_path(root)
+                    withenv("DARONE_DARWIN_REV" => repeat("0", 40)) do
+                        @test_throws ArgumentError darwin_root()
+                    end
+                end
+            finally
+                Pkg.activate(dirname(original_project); io=devnull)
+            end
             old = MITgcm_path[1]
             try
                 MITgcm_path[1] = "/dar_one_docker/darwin3"
