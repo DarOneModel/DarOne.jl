@@ -83,13 +83,8 @@ function _with_build_source(f::Function, name::AbstractString)
             rm(destination; recursive=true, force=true)
             mv(prepared, destination)
             open(joinpath(workspace, "source-provenance.txt"), "w") do io
-                println(io, "darwin_source=", source)
                 println(io, "darwin_revision=", _source_commit(source))
-                println(io, "configuration=", configuration_root(name))
-                python = Sys.which("python")
-                println(io, "python_executable=", something(python, "unavailable"))
-                version = python === nothing ? "unavailable" : strip(read(`$python --version`, String))
-                println(io, "python_version=", version)
+                println(io, "config_revision=", _source_commit(configuration_root(name)))
                 println(io, "legacy_cog_compatibility=", patched)
             end
             patched && @info "Applied legacy Cog Python compatibility in the writable Darwin3 build source" destination

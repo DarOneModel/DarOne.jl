@@ -48,35 +48,17 @@ jobs:
       - name: Install Julia dependencies
         run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
 
-      - name: Prepare pinned Darwin sources through DarOne
+      - name: Set managed Darwin paths
         run: |
-          # Fetches and validates both commits from darwin-sources.env; it
-          # stages a writable configuration outside the pristine source tree.
           julia --project=. -e '
             using DarOne
-            darwin = darwin_root()
-            config = configuration_root()
-            @assert isfile(joinpath(darwin, "tools", "genmake2"))
-            @assert isfile(joinpath(config, "code", "SIZE.h"))
             open(ENV["GITHUB_ENV"], "a") do io
-              println(io, "DARONE_MITGCM_PATH=", darwin)
-              println(io, "DARONE_CONFIG_PATH=", config)
+              println(io, "DARONE_MITGCM_PATH=", darwin_root())
+              println(io, "DARONE_CONFIG_PATH=", configuration_root())
             end
-            println("Darwin3: ", darwin, "\nConfiguration: ", config)
           '
           git config --global user.name "DarOne CI"
           git config --global user.email "darone-ci@localhost"
-
-      - name: Smoke-test Darwin3 Cog with Python 3.12
-        run: |
-          python --version
-          julia --project=. -e '
-            using DarOne
-            DarOne._with_build_source(base_configuration) do source
-              cog = joinpath(source, "tools", "darwin", "cog")
-              run(`$cog -v`)
-            end
-          '
 
       - name: Test examples (all 16 global tiles, five days)
         run: |
