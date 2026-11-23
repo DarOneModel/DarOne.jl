@@ -18,10 +18,11 @@ update_all_diagnostic_freqs(config_obj, frequency)
 
 # seed files from Darwin - yearly averages
 # 3d file - contains tracer values (nutrients and plankton)
-seed_file = "/dar_one_docker/3d.nc"
+seed_dir = pkgdir(DarOne, "data", "darwin")
+seed_file = joinpath(seed_dir, "surface_tracers.nc")
 seed_ds = Dataset(seed_file)
 # par file - contains irradiance 
-seed_par_file = "/dar_one_docker/par.nc"
+seed_par_file = joinpath(seed_dir, "par_upper4.nc")
 seed_ds_par = Dataset(seed_par_file)
 # seeded from N Pacific gyre 
 # OPTION: try different locations! (change x and y)

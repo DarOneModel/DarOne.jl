@@ -36,9 +36,10 @@ update_delX_delY_for_grid(config_obj, nX, nY)
 
 
 # seeded from N Pacific gyre 
-seed_file = "/dar_one_docker/3d.nc"
+seed_dir = pkgdir(DarOne, "data", "darwin")
+seed_file = joinpath(seed_dir, "surface_tracers.nc")
 seed_ds = Dataset(seed_file)
-seed_par_file = "/dar_one_docker/par.nc"
+seed_par_file = joinpath(seed_dir, "par_upper4.nc")
 seed_ds_par = Dataset(seed_par_file)
 x = 203
 y = 135
