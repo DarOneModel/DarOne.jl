@@ -2,9 +2,6 @@ using DarOne
 using NCDatasets
 using DelimitedFiles
 
-# set path to MITgcm 
-MITgcm_path[1] = "/dar_one_docker/darwin3" # CHANGE ME (unless using docker)
-
 # create and set up config 
 # TODO: Change name! Must be unique!
 config_name = "zoo32_test" 

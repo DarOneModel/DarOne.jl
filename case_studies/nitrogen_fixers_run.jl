@@ -1,8 +1,6 @@
 using DarOne
 using NCDatasets
 
-# set path to MITgcm 
-
 # set up size of your grid 
 nX = 30
 nY = 30

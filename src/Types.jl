@@ -16,8 +16,8 @@ Data structure representing a MITgcm _namelist_ file, such as `data.pkg`, which 
 with model parameters (`params`) being organized in `groups` as done in the files.
 
 ```
-using MITgcmTools
-fil=joinpath(MITgcm_path[1],"verification","advect_xy","run","data")
+using DarOne
+fil=joinpath(configuration_root(), "input", "data")
 nml=read_namelist(fil)
 MITgcm_namelist(nml.groups,nml.params)
 MITgcm_namelist(groups=nml.groups,params=nml.params)

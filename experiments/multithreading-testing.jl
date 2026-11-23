@@ -2,7 +2,6 @@ using DarOne
 using NCDatasets
 
 println("Julia running with $(Threads.nthreads()) threads")
-MITgcm_path[1] = "/Users/birdy/Documents/eaps_research/darwin3/"
 
 # load a seed file
 seed_file = "/Users/birdy/Documents/eaps_research/gcm_analysis/gcm_data/jan_7_2022/3d.0000000000.nc"

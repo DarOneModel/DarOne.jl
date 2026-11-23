@@ -3,9 +3,6 @@ using DarOne
 using ClimateModels
 using NCDatasets
 
-# the path to the Darwin version of the MITgcm
-MITgcm_path[1] = "/Users/birdy/Documents/eaps_research/darwin3" 
-
 # load seed files - these are from global darwin runs 
 seed_file_3d = "/Users/birdy/Documents/eaps_research/gcm_analysis/gcm_data/darwin_weekly_seasonal/3d.nc"
 seed_file_temp = "/Users/birdy/Documents/eaps_research/gcm_analysis/gcm_data/darwin_weekly_seasonal/tave.nc"

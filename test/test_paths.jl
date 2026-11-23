@@ -12,6 +12,15 @@ using Test, DarOne, Pkg
         withenv("DARONE_MITGCM_PATH" => root) do
             @test_throws ArgumentError darwin_root()
         end
+        withenv("DARONE_CONFIG_PATH" => root) do
+            @test_throws ArgumentError configuration_root()
+        end
+        mkpath(joinpath(root, "tools"))
+        write(joinpath(root, "tools", "genmake2"), "")
+        run(`git -C $root init -q`)
+        run(`git -C $root add .`)
+        run(`git -C $root -c user.name=DarOne -c user.email=ci@localhost commit -qm test`)
+        @test_throws ArgumentError set_darwin_path(root)
         # Exercise persistence without changing the user's project preferences.
         write(joinpath(root, "Project.toml"),
               "[deps]\nDarOne = \"68a5c792-066c-4fa4-bf39-3229eee150df\"\n")

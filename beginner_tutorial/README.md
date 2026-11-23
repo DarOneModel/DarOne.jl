@@ -43,13 +43,7 @@ using ClimateModels
 ```
 The `using` statement loads `DarOne` from the project environment (selected with `--project=..` when running from `beginner_tutorial`).
 
-(2) After including our dependencies, we have to specify the `MITgcm_path`. This tells `Dar_One` where 
-to look for the Darwin MITgcm code. The default value will work if using the docker. Otherwise, 
-paste in the path to where you downloaded `darwin3`. 
-```
-# the path to the Darwin version of the MITgcm 
-MITgcm_path[1] = "/dar_one_docker/darwin3" # CHANGE ME (unless using docker)
-```
+(2) The Darwin3 and configuration paths are saved once using `set_darwin_path` and `set_config_path` (see the [getting-started guide](https://daronemodel.github.io/DarOne.jl/build/getting_started/)). The tutorial reuses those paths automatically.
 Next, we create a unique identifier for our run. 
 ```
 # unique name for your run 
@@ -136,17 +130,18 @@ STOP NORMAL END
 [ Info: 1 run did not fail!!!!! 
 [ Info: 1 run completed
 [ Info: 1 time elapsed: 50.518673042 seconds
-[ Info: 1 Output in directory /dar_one_docker/darwin3/verification/dar_one_config/run/beginner_tutorial/run, most recent ecco folder 
 ```
 Don't worry, those warnings are totally normal :) 
 
 ## Understanding and Plotting Results 
 
-As the output from the previous run suggests, all of the information about your simulation lives in the folder `/dar_one_docker/darwin3/verification/dar_one_config/run/beginner_tutorial/run` (or, if running locally, underneath your `darwin3` folder). 
+The simulation output lives in a run folder under DarOne's writable workspace. To find the workspace from the `beginner_tutorial` directory, run:
 
-Let's look at the contents of this folder
-`# cd /dar_one_docker/darwin3/verification/dar_one_config/run/beginner_tutorial/run`
-`# ls`
+```bash
+julia --project=.. -e 'using DarOne; println(configuration_root())'
+```
+
+Open the `run/beginner_tutorial-pro-syn-2/run` subdirectory there to inspect the output (or use the `rundir` returned by `create_MITgcm_config`).
 
 You'll see a lot of files, but look for the folder that starts with `ecco_gud_[DATE]_0001`. 
 

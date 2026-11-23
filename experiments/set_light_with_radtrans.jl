@@ -3,9 +3,6 @@ using DarOne
 using ClimateModels
 using NCDatasets
 
-# the path to the Darwin version of the MITgcm
-MITgcm_path[1] = "/Users/birdy/Documents/eaps_research/darwin3" 
-
 # unique name for your run 
 config_id = "radtrans_test_10" # CHANGE ME
 

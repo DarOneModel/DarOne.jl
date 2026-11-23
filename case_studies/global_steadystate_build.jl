@@ -1,8 +1,6 @@
 using DarOne
 using NCDatasets
 
-# set path to MITgcm 
-
 # set up size of your grid
 # running the 360x160 world in 16 quadrants in case something goes wrong midway
 nX = 90

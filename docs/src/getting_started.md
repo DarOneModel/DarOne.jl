@@ -11,11 +11,11 @@ DarOne Model Configuration: The DarOne system models a single, well mixed parcel
 DarOne is composed of three main parts: the MITgcm Darwin code, a configuration made for DarOne, and the julia interface to modify the configuration and run the model. 
 
 - [DarOne.jl](https://github.com/DarOneModel/DarOne.jl) - Julia interface for organizing experiments and setting up parameters for model runs
-    - `MITgcm_path` variable needs to point to darwin3
+    - Darwin3 and configuration checkout paths are saved once with Preferences.jl
 - [darwin3](https://github.com/darwinproject/darwin3) - MITgcm source code set up to include all things Darwin 
-    - `dar_one_config` - folder for the base configuration files for DarOne, which lives in the darwin3/verification/ folder. ([DarOne_config github](https://github.com/barbara42/dar_one_config))
+    - [`dar_one_config`](https://github.com/barbara42/dar_one_config) - the independent repository for DarOne configuration files
 
-Experiments are designed and run in a Julia file using the DarOne Julia interface. This will create a unique run folder nested underneath the MITgcm darwin code and the dar_one_config folder. You will never have to look at the fortran of MITgcm Darwin or at the configuration files! However, output of the experiment is saved underneath that unique run folder that is created in `darwin3/verification/dar_one_config/run`.
+Experiments are designed and run from Julia files. DarOne copies the pinned configuration into a writable workspace; build files, run folders, and simulation output live there, leaving both Git checkouts unchanged. Use `configuration_root()` to find the workspace.
 
 ![DarOne Anatomy](images/DarOne_anatomy.png)
 
@@ -61,38 +61,27 @@ You're now ready for the [beginner tutorial](https://daronemodel.github.io/DarOn
 
 ## Setting up on local machine
 
-You will need to clone 3 git repositories
-- DarOne.jl
-- darwin3 
-- dar_one_config
+Clone DarOne for its tutorials and check out the supported Darwin3 and configuration revisions. The reference commits are recorded in `darwin-sources.env`:
 
-First, we will clone the DarOne.jl code.
-
-```
+```bash
 git clone https://github.com/DarOneModel/DarOne.jl.git
+cd DarOne.jl
+mkdir -p ~/src
+. ./darwin-sources.env
+git clone https://github.com/darwinproject/darwin3.git ~/src/darwin3
+git -C ~/src/darwin3 checkout --detach "$DARWIN_REV"
+git clone https://github.com/barbara42/dar_one_config.git ~/src/dar_one_config
+git -C ~/src/dar_one_config checkout --detach "$DARONE_CONFIG_REV"
 ```
 
-Then in a directory of your choosing, clone the MITgcm Darwin code. I put this in a folder called "climate_models" on my desktop.
+Install dependencies and save these locations **once** for the active Julia environment:
 
-```
-git clone https://github.com/darwinproject/darwin3.git
-```
-
-Once darwin3 code is cloned, we will navigate to the `/verification` folder underneath it. 
-
-```
-cd darwin3/verification
-```
-Here, under `darwin3/verification`, we will clone the `dar_one_config` repository. 
-
-```
-git clone https://github.com/barbara42/dar_one_config.git
+```bash
+julia --project=. -e 'using Pkg; Pkg.instantiate()'
+julia --project=. -e 'using DarOne; set_darwin_path(joinpath(homedir(), "src", "darwin3")); set_config_path(joinpath(homedir(), "src", "dar_one_config"))'
 ```
 
-After these steps, you should have 
-1. the DarOne source code 
-2. the darwin3 source code
-3. the `dar_one_config` code nested under `darwin3/verification`
+DarOne validates both Git commits. Subsequent sessions reuse the saved paths through Preferences.jl. To locate generated model files, run `julia --project=. -e 'using DarOne; println(configuration_root())'`.
 
 ### Dependencies 
 
@@ -159,27 +148,17 @@ For every DarOne script, you will first import DarOne. Run scripts using `julia 
 using DarOne
 ```
 
-Next you must always make sure you have a line specifying the correct value for `MITgcm_path[1]`. If you are using the docker, it will be set to "/dar_one_docker/darwin3". Otherwise, you will point it to the direcotry of [darwin3](https://github.com/darwinproject/darwin3) on your local machine. 
-
-```
-# the path to the Darwin version of the MITgcm
-MITgcm_path[1] = "/dar_one_docker/darwin3" 
-```
-
-You build with the following function.
+With the source paths saved during setup, build the model with:
 
 ```
 build(base_configuration)
 ```
 Once the model has been built, you can run multiple experiments with different values for the intial parameters. I like to put the previous code in one file, and the code to initialize and run an experiment in another.
 
-For the run script, you will also have to import DarOne and set the MITgcm path. 
+For the run script, import DarOne. The same saved source paths are reused:
 
-```
+```julia
 using DarOne
-
-# the path to the Darwin version of the MITgcm
-MITgcm_path[1] = "/dar_one_docker/darwin3" 
 ```
 
 Set up experiment config id 
@@ -199,7 +178,7 @@ run(config_obj)
 ```
 
 To recap the basic workflow: 
-- Always import `DarOne` and set `MITgcm_path`
+- Import `DarOne`; source paths are already saved in Preferences.jl
 - Build
     - set your grid size
     - set nutrients to cycle or stay constant 

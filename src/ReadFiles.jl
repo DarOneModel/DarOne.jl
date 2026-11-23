@@ -170,9 +170,8 @@ Read a `MITgcm` namelist file, parse it, and return as a NamedTuple
 - assumes a single variable definition per line
 
 ```
-using MITgcmTools
-testreport("advect_xy")
-fil=joinpath(MITgcm_path[1],"verification","advect_xy","run","data")
+using DarOne
+fil=joinpath(configuration_root(), "input", "data")
 namelist=read_namelist(fil)
 ```
 """
@@ -280,10 +279,10 @@ end
 Save a `MITgcm` namelist file. In the example below, one is read from file, modified, and then saved to a new file using write_namelist.
 
 ```
-using MITgcmTools
-fil=joinpath(MITgcm_path[1],"verification","advect_xy","run","data")
+using DarOne
+fil=joinpath(configuration_root(), "input", "data")
 nml=read_namelist(fil)
-write_namelist(fil*"_new",namelist)
+write_namelist(fil*"_new",nml)
 ```
 
 or 
