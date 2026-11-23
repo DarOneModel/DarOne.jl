@@ -82,7 +82,7 @@ mktempdir() do plot_dir
     plot_file = joinpath(plot_dir, "beginner_tutorial.png")
     environment = [
         "DARONE_MITGCM_PATH" => DARWIN,
-        "DARONE_CONFIG_PATH" => CONFIG_ROOT,
+        "DARONE_CONFIG_PATH" => DarOne._configured_source(:config),
         "DARONE_DATA_DIR" => DATA_DIR,
         "DARONE_EXAMPLE_ITERATIONS" => "12",
         "DARONE_EXAMPLE_ID_SUFFIX" => RUN_SUFFIX,

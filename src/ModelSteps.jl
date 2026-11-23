@@ -120,10 +120,8 @@ Compile the model using `make` in `build/` that has already been setup.
 function compile(config::MITgcm_config)
     build_dir = build_directory(config.configuration)
     isdir(build_dir) || throw(ArgumentError("Build directory not found at $build_dir; call build(config) first."))
-    _with_build_lock(config.configuration) do _
-        cd(build_dir) do
-            @suppress run(`make -j 4`)
-        end
+    cd(build_dir) do
+        @suppress run(`make -j 4`)
     end
     return true
 end

@@ -6,15 +6,13 @@ module DarOne
 using OrderedCollections, Printf, Suppressor, ClimateModels, DelimitedFiles, Preferences
 
 include("Types.jl")
-include("Sources.jl")
 include("Paths.jl")
-include("BuildSources.jl")
 include("ReadFiles.jl")
 include("ModelSteps.jl")
 include("NamelistHelpers.jl")
 include("GridBinHelpers.jl")
 
-export MITgcm_path, base_configuration, filexe
+export base_configuration
 export darwin_root, configuration_root, executable_path, source_revisions
 export set_darwin_path, set_config_path
 
@@ -60,14 +58,6 @@ export scan_rundir, scan_stdout
 
 
 """
-    MITgcm_path
-
-Path to a MITgcm folder. `MITgcm_path[1]` should generally be used. `MITgcm_path[2]` is mostly 
-meant to facilitate comparisons between e.g. MITgcm releases when needed.
-"""
-MITgcm_path = [get(ENV, "DARONE_MITGCM_PATH", "/dar_one_docker/darwin3")]
-
-"""
     base_configuration
 
 Name of the folder that lives in the /verificaion folder of the MITgcm. This holds the basic 
@@ -75,21 +65,6 @@ configuration for Dar_One, which is a homogenous 1m x 1m x 1m water parcel with 
 no mixing, few nuturients, and no biological forcing. 
 """
 base_configuration = "dar_one_config"
-
-"""
-    filexe
-
-Legacy snapshot of the default MITgcm executable path at module load.
-Use `executable_path()` to resolve the current path after changing
-`MITgcm_path[1]` or the environment.
-"""
-# Legacy path snapshot; internal code resolves executable_path() at call time.
-# Preserve the legacy string without provisioning sources during `using DarOne`.
-# `executable_path()` gives the current managed/external build location.
-filexe = haskey(ENV, "DARONE_CONFIG_PATH") ?
-    joinpath(abspath(expanduser(ENV["DARONE_CONFIG_PATH"])), "build", "mitgcmuv") :
-    joinpath(MITgcm_path[1], "verification", base_configuration, "build", "mitgcmuv")
-
 
 """
 Functions to modify the build-time parameters (files in dar_one_config > code)

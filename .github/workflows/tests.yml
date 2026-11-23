@@ -2,6 +2,7 @@ name: Tests
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -48,15 +49,22 @@ jobs:
       - name: Install Julia dependencies
         run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
 
-      - name: Set managed Darwin paths
+      - name: Check out pinned Darwin3 sources
         run: |
-          julia --project=. -e '
-            using DarOne
-            open(ENV["GITHUB_ENV"], "a") do io
-              println(io, "DARONE_MITGCM_PATH=", darwin_root())
-              println(io, "DARONE_CONFIG_PATH=", configuration_root())
-            end
-          '
+          set -eu
+          . ./darwin-sources.env
+          source_dir="$RUNNER_TEMP/darone-sources"
+          mkdir -p "$source_dir"
+          git init -q "$source_dir/darwin3"
+          git -C "$source_dir/darwin3" remote add origin https://github.com/darwinproject/darwin3.git
+          git -C "$source_dir/darwin3" fetch --quiet --depth 1 origin "$DARWIN_REV"
+          git -C "$source_dir/darwin3" checkout --quiet --detach FETCH_HEAD
+          git init -q "$source_dir/dar_one_config"
+          git -C "$source_dir/dar_one_config" remote add origin https://github.com/barbara42/dar_one_config.git
+          git -C "$source_dir/dar_one_config" fetch --quiet --depth 1 origin "$DARONE_CONFIG_REV"
+          git -C "$source_dir/dar_one_config" checkout --quiet --detach FETCH_HEAD
+          echo "DARONE_MITGCM_PATH=$source_dir/darwin3" >> "$GITHUB_ENV"
+          echo "DARONE_CONFIG_PATH=$source_dir/dar_one_config" >> "$GITHUB_ENV"
           git config --global user.name "DarOne CI"
           git config --global user.email "darone-ci@localhost"
 
@@ -68,14 +76,15 @@ jobs:
       - name: Collect model diagnostic inventory on failure
         if: failure()
         run: |
-          if [ -d "$DARONE_CONFIG_PATH/run" ]; then
-            find "$DARONE_CONFIG_PATH/run" \
+          config_dir="$(julia --project=. -e 'using DarOne; print(configuration_root())' || true)"
+          if [ -n "$config_dir" ] && [ -d "$config_dir/run" ]; then
+            find "$config_dir/run" \
               -type f \( -name '3d*' -o -name 'data.diagnostics' \) \
               -printf '%p %s bytes\n' | sort > "$RUNNER_TEMP/darone-diagnostic-inventory.txt"
             head -n 100 "$RUNNER_TEMP/darone-diagnostic-inventory.txt"
           fi
-          if [ -f "$DARONE_CONFIG_PATH/build/genmake.log" ]; then
-            cp "$DARONE_CONFIG_PATH/build/genmake.log" "$RUNNER_TEMP/darone-genmake.log"
+          if [ -n "$config_dir" ] && [ -f "$config_dir/build/genmake.log" ]; then
+            cp "$config_dir/build/genmake.log" "$RUNNER_TEMP/darone-genmake.log"
           fi
 
       - name: Upload failure logs

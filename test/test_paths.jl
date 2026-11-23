@@ -1,37 +1,37 @@
-using Test, DarOne
+using Test, DarOne, Pkg
 
-@testset "Darwin3 paths" begin
+@testset "Configured Darwin3 paths" begin
+    darwin = darwin_root()
+    config = DarOne._configured_source(:config)
+    workspace = configuration_root()
+    @test workspace != config && isfile(joinpath(workspace, "code", "SIZE.h"))
+    @test executable_path() == joinpath(workspace, "build", "mitgcmuv")
+    @test create_MITgcm_config("trial")[2] == joinpath(workspace, "run", "trial", "run")
+
     mktempdir() do root
-        darwin = joinpath(root, "darwin source")
-        config = joinpath(root, "separate config")
-        nested = joinpath(darwin, "verification", base_configuration)
-        mkpath(nested)
-        mkpath(config)
-
-        withenv("DARONE_MITGCM_PATH" => darwin, "DARONE_CONFIG_PATH" => config) do
-            @test darwin_root() == darwin
-            @test configuration_root() == config
-            @test executable_path() == joinpath(config, "build", "mitgcmuv")
-            _, run = create_MITgcm_config("trial")
-            @test run == joinpath(config, "run", "trial", "run")
-            @test DarOne._expand_input_paths("../input/x\n../../shared/y\n", base_configuration) ==
-                  joinpath(config, "input", "x") * "\n" *
-                  joinpath(darwin, "verification", "shared", "y") * "\n"
+        withenv("DARONE_MITGCM_PATH" => root) do
+            @test_throws ArgumentError darwin_root()
         end
-
-        withenv("DARONE_MITGCM_PATH" => darwin, "DARONE_CONFIG_PATH" => nothing,
-                "DARONE_CONFIG_REV" => nothing) do
-            @test configuration_root() == nested
-        end
-
-        old = MITgcm_path[1]
+        # Exercise persistence without changing the user's project preferences.
+        write(joinpath(root, "Project.toml"),
+              "[deps]\nDarOne = \"68a5c792-066c-4fa4-bf39-3229eee150df\"\n")
+        active = Base.active_project()
         try
-            withenv("DARONE_MITGCM_PATH" => nothing) do
-                MITgcm_path[1] = darwin
+            Pkg.activate(root; io=devnull)
+            withenv("DARONE_MITGCM_PATH" => nothing, "DARONE_CONFIG_PATH" => nothing) do
+                set_darwin_path(darwin)
+                set_config_path(config)
                 @test darwin_root() == darwin
+                @test configuration_root() == workspace
+                @test isfile(joinpath(root, "LocalPreferences.toml"))
             end
         finally
-            MITgcm_path[1] = old
+            Pkg.activate(dirname(active); io=devnull)
         end
     end
+
+    DarOne._with_build_source(base_configuration) do source
+        write(joinpath(source, "darone-generated.F"), "")
+    end
+    @test !isfile(joinpath(darwin, "darone-generated.F"))
 end
