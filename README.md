@@ -23,7 +23,7 @@ Documentation for the darwin3 MITgcm fortran model can be found [here](https://d
 DarOne.jl is a tool for designing and running experiments simulating the marine microbiome within a single cube of water. The biogeochemical forcing is powered by the [MIT Darwin Model](https://darwinproject.mit.edu/), and DarOne.jl provides a Julia interface to build, configure, and run experiments with a simple, streamlined workflow. DarOne.jl is composed of two main parts:
 
 - [DarOne.jl](https://github.com/DarOneModel/DarOne.jl) - Julia interface for organizing experiments and setting up parameters for model runs
-    - `MITgcm_path` variable should point to darwin3
+    - Configure the Darwin3 checkout once with `set_darwin_path(path)`; Preferences.jl remembers it for subsequent Julia sessions
 - [darwin3](https://github.com/darwinproject/darwin3) - MITgcm source code set up to include all things Darwin 
     - `DarOne_config` - folder for the base configuration files for DarOne, which lives in the darwin3/verification/ folder. ([DarOne_config github](https://github.com/barbara42/dar_one_config))
 
@@ -60,6 +60,16 @@ You're now ready for the [beginner tutorial](beginner_tutorial)!
 # Setting up on local machine
 
 See instructions in the documentation: https://daronemodel.github.io/DarOne.jl/build/getting_started/#Setting-up-on-local-machine
+
+After checking out the supported Darwin3 and `dar_one_config` revisions, configure the source path once:
+
+```julia
+using DarOne
+set_darwin_path("/path/to/darwin3")
+```
+
+This setting is saved for the current Julia environment. The configuration repository
+should be at `darwin3/verification/dar_one_config`. CI can also use `DARONE_MITGCM_PATH`.
 
 ## Example integration tests
 

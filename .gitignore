@@ -8,3 +8,5 @@ Manifest-v*.toml
 
 # Generated NetCDF inputs for example integration tests.
 test/resources/example_data/
+
+LocalPreferences.toml

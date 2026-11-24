@@ -3,7 +3,9 @@ module DarOne
 # using Dates, Printf, SparseArrays, Artifacts, LazyArtifacts, UUIDs, Suppressor
 # using OrderedCollections, DataFrames, NetCDF, MeshArrays, ClimateModels
 
-using OrderedCollections, Printf, Suppressor, ClimateModels, DelimitedFiles
+using OrderedCollections, Printf, Suppressor, ClimateModels, DelimitedFiles, Preferences
+
+include("Paths.jl")
 
 include("Types.jl")
 include("ReadFiles.jl")
@@ -11,7 +13,7 @@ include("ModelSteps.jl")
 include("NamelistHelpers.jl")
 include("GridBinHelpers.jl")
 
-export MITgcm_path, base_configuration, filexe
+export base_configuration, set_darwin_path, darwin_root, executable_path
 
 # Types 
 export MITgcm_config, MITgcm_namelist
@@ -55,14 +57,6 @@ export scan_rundir, scan_stdout
 
 
 """
-    MITgcm_path
-
-Path to a MITgcm folder. `MITgcm_path[1]` should generally be used. `MITgcm_path[2]` is mostly 
-meant to facilitate comparisons between e.g. MITgcm releases when needed.
-"""
-MITgcm_path = ["/Users/birdy/Documents/eaps_research/darwin3"]
-
-"""
     base_configuration
 
 Name of the folder that lives in the /verificaion folder of the MITgcm. This holds the basic 
@@ -70,15 +64,6 @@ configuration for Dar_One, which is a homogenous 1m x 1m x 1m water parcel with 
 no mixing, few nuturients, and no biological forcing. 
 """
 base_configuration = "dar_one_config"
-
-"""
-    filexe
-
-Path to the file that contains the built MITgcm, normally named "mitgcmuv".
-The executable should be compiled on whatever machine you're using to run the model, 
-unless using the docker container [TODO: link]
-"""
-filexe=joinpath(MITgcm_path[1],"verification",base_configuration,"build","mitgcmuv")
 
 
 """
@@ -90,7 +75,7 @@ NOTE: dangerous! no copies of files are made
 Default grid size is 1 x 1. 
 
 """
-function update_grid_size(x, y, file=joinpath(MITgcm_path[1], "verification", base_configuration, "code", "SIZE.h"))
+function update_grid_size(x, y, file=joinpath(darwin_root(), "verification", base_configuration, "code", "SIZE.h"))
     meta = read(file, String)
     meta = split(meta, "\n")
     
@@ -132,7 +117,7 @@ To allow all nutrients to vary, the parameter would be `ones(19)`.
 The indices in the param_list correspond to the following nutrients, in order: 
 [DIC, NO3, NO2, NH4, PO4, SiO2, FeT, DOC, DON, DOP, DOFe, PIC, POC, PON, PIP, PISi, POFe, ALK, O2]
 """
-function hold_nutrients_constant(param_list, file=joinpath(MITgcm_path[1], "verification", base_configuration, "code", "darwin_plankton.F"))
+function hold_nutrients_constant(param_list, file=joinpath(darwin_root(), "verification", base_configuration, "code", "darwin_plankton.F"))
     # TODO: add check that para is 19 long 
     meta = read(file, String)
     meta = split(meta, "\n")

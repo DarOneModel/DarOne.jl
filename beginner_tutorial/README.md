@@ -43,12 +43,11 @@ using ClimateModels
 ```
 The `using` statement loads `DarOne` from the project environment (selected with `--project=..` when running from `beginner_tutorial`).
 
-(2) After including our dependencies, we have to specify the `MITgcm_path`. This tells `Dar_One` where 
-to look for the Darwin MITgcm code. The default value will work if using the docker. Otherwise, 
-paste in the path to where you downloaded `darwin3`. 
+(2) Configure the Darwin3 source location once with `set_darwin_path`. This tells DarOne where
+to look for the Darwin MITgcm code. In the Docker container, configure `/dar_one_docker/darwin3`; otherwise use the path to your local checkout.
 ```
 # the path to the Darwin version of the MITgcm 
-MITgcm_path[1] = "/dar_one_docker/darwin3" # CHANGE ME (unless using docker)
+set_darwin_path("/path/to/darwin3") # Run once per Julia environment
 ```
 Next, we create a unique identifier for our run. 
 ```
