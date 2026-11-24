@@ -2,8 +2,6 @@ using DarOne
 using NCDatasets
 using DelimitedFiles
 
-# set path to MITgcm 
-
 # set up size of your grid 
 nX = 1
 nY = 1
@@ -25,9 +23,10 @@ update_all_diagnostic_freqs(config_obj, frequency)
 update_delX_delY_for_grid(config_obj, nX, nY) 
 
 # seeded from N Pacific gyre 
-seed_file = "/dar_one_docker/3d.nc"
+seed_dir = pkgdir(DarOne, "data", "darwin")
+seed_file = joinpath(seed_dir, "surface_tracers.nc")
 seed_ds = Dataset(seed_file)
-seed_par_file = "/dar_one_docker/par.nc"
+seed_par_file = joinpath(seed_dir, "par_upper4.nc")
 seed_ds_par = Dataset(seed_par_file)
 x = 203
 y = 135
@@ -61,7 +60,7 @@ update_radtrans(config_obj, seed_ds_par, x, y, z, t)
 
 # set palatability matrix 
 # load up strict matrix from file 
-strict_file = "/dar_one_docker/Dar_One/experiments/zooplankton_workshop2023/extras/palat_matrix_strict.csv"
+strict_file = joinpath(@__DIR__, "extras", "palat_matrix_strict.csv")
 strict_palat_matrix = readdlm(strict_file, ',', Float64)
 
 # flex_file = "extras/palat_matrix_flex.csv"
