@@ -1,6 +1,7 @@
 # DarOne.jl
 
 [![Tests](https://github.com/DarOneModel/DarOne.jl/actions/workflows/tests.yml/badge.svg)](https://github.com/DarOneModel/DarOne.jl/actions/workflows/tests.yml)
+[![Docker](https://github.com/DarOneModel/DarOne.jl/actions/workflows/docker.yml/badge.svg)](https://github.com/DarOneModel/DarOne.jl/actions/workflows/docker.yml)
 
 Built off of Gael Forget's MITgcmTools! (https://github.com/gaelforget/MITgcmTools.jl)
 
@@ -52,11 +53,31 @@ DarOne can be run in one of two ways.
 
     `docker run -it birdy1123/dar1` 
 - this runs the container in interactive mode (`-i`) with terminal access (`-t`) 
-- you should see the prompt change to `root@some-number:/DarOne_docker#`
+- you should see the prompt change to `root@some-number:/dar_one_docker#`
     - if the container is already running, you can connect to it with `docker exec -it [CONTAINER_ID] bash`
     - Note: connecting with `bash` rather than `sh` gives you more a powerful terminal (i.e. with tab completion) 
   
 You're now ready for the [beginner tutorial](beginner_tutorial)!
+
+## Building the Docker image from source
+
+From the root of a DarOne.jl checkout, build and test the image:
+
+```bash
+docker build --platform=linux/amd64 -t darone:local .
+docker run --rm --network none darone:local bash Dar_One/test/docker_smoke.sh
+```
+
+The [Dockerfile](Dockerfile) installs Julia dependencies, checks out the Darwin sources at the revisions in [`darwin-sources.env`](darwin-sources.env), and compiles the beginner model executable. The [Docker CI workflow](.github/workflows/docker.yml) builds and tests the image and publishes tested version-tagged images to GitHub Container Registry.
+
+To start an interactive container from your local image:
+
+```bash
+docker run -it darone:local
+```
+
+The CI images target `linux/amd64`. On Apple Silicon, Docker can run these images using x86 emulation, which may be slower.
+
 # Setting up on local machine
 
 See instructions in the documentation: https://daronemodel.github.io/DarOne.jl/build/getting_started/#Setting-up-on-local-machine
