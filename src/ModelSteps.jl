@@ -1,7 +1,7 @@
 # This file is derived from MITgcm.jl (https://github.com/gaelforget/MITgcm.jl)
 # Copyright (c) 2020 gaelforget <gforget@mit.edu>
 # SPDX-License-Identifier: MIT
-# See LICENSES/MITgcm.jl-LICENSE.txt for the full license text.
+# See LICENSE for the full license text.
 
 import ClimateModels: compile, build, setup, clean
 using Dates, Setfield
