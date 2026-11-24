@@ -1,0 +1,12 @@
+.git
+**/.git
+.github
+**/.DS_Store
+**/Manifest.toml
+**/Manifest-v*.toml
+**/LocalPreferences.toml
+darwin3/
+mitgcmuv
+**/mitgcmuv
+docs/build/
+test/resources/example_data/
