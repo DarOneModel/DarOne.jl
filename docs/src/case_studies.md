@@ -40,7 +40,7 @@ Each case study has a file to build the Darwin model and a file to run it. As ex
 A simple nutrient amendment experiment. What happens if we take a plankton community that is nitrogen limited and add nitrogen? 
 
 ## Overview 
-In this experiment, DAR1 is initialized with values from a global DARWIN run. Initial parameter values were taken from location X=203 and Y=108 (lon = 203.5, lat = 28.5). In the control run, nothing was modified. For the bottle experiment run, nitrate values were increased 10x. 
+In this experiment, DarOne is initialized with values from a global DARWIN run. Initial parameter values were taken from location X=203 and Y=108 (lon = 203.5, lat = 28.5). In the control run, nothing was modified. For the bottle experiment run, nitrate values were increased 10x. 
 
 ![bottle experiment](images/bottle_experiment.png)
 
@@ -112,7 +112,7 @@ using NCDatasets
 MITgcm_path[1] = "/dar_one_docker/darwin3" 
 ```
 
-Next, we load up the files using to set initial values for tracers, taken from a surface point in a global MITgcm Darwin run. Annual-mean versions of these files ship with DAR1 in the `data/darwin` directory (`surface_tracers.nc`, `surface_temperature.nc`, and `par_upper4.nc`), and the case studies read them from there by default. To seed from other Darwin output, set the `DARONE_DATA_DIR` environment variable to a directory containing files with those names.
+Next, we load up the files using to set initial values for tracers, taken from a surface point in a global MITgcm Darwin run. Annual-mean versions of these files ship with DarOne in the `data/darwin` directory (`surface_tracers.nc`, `surface_temperature.nc`, and `par_upper4.nc`), and the case studies read them from there by default. To seed from other Darwin output, set the `DARONE_DATA_DIR` environment variable to a directory containing files with those names.
 
 ```
 # load seed files - these are from global darwin runs 
@@ -236,9 +236,9 @@ Now you have a netcdf file on your local machine to explore however you prefer! 
 
 ![steady-state](images/Fig_Bray_Curtis.png)
 
-(A) The average total biomass over the course of a year in the DARWIN model. Parameters from the DARWIN model, such as nutrients, species abundance, sunlight, and temperature, are used to initialize a matrix of DAR1s, shown in (B).  The DAR1 grid is 360x160 large, with each DAR1 "cell" corresponding to a lat/lon point in the DARWIN model. The grid of DAR1s is run 10 years forward, with final "steady state" values calculated from the average of the last two years. (C) shows the Bray-Curtis Dissimilarity index of the steady state community versus the initial community. The steady state is highly dissimilar to DARWIN in regions with high values (yellow), and low valued (blue) indicate areas where the community structure of the two models are comparable.
+(A) The average total biomass over the course of a year in the DARWIN model. Parameters from the DARWIN model, such as nutrients, species abundance, sunlight, and temperature, are used to initialize a matrix of DarOne instances, shown in (B).  The DarOne grid is 360x160 large, with each DarOne "cell" corresponding to a lat/lon point in the DARWIN model. The grid of DarOne instances is run 10 years forward, with final "steady state" values calculated from the average of the last two years. (C) shows the Bray-Curtis Dissimilarity index of the steady state community versus the initial community. The steady state is highly dissimilar to DARWIN in regions with high values (yellow), and low valued (blue) indicate areas where the community structure of the two models are comparable.
 
-See the grid section of the [beginner tutorials](https://daronemodel.github.io/DarOne.jl/build/beginner_tutorials/) to learn the details of how to run DAR1 in parallel in this grid format.
+See the grid section of the [beginner tutorials](https://daronemodel.github.io/DarOne.jl/build/beginner_tutorials/) to learn the details of how to run DarOne in parallel in this grid format.
 
 ## Code Walkthrough
 
@@ -287,7 +287,7 @@ vim global_steadystate_run.jl
 ```
 We will go through every line of code in this file before we close it and run it from the docker command line. 
 
-The yearly averages from a global DARWIN run were used to initialize a grid of DAR1s. Here, we load up those seed files. 
+The yearly averages from a global DARWIN run were used to initialize a grid of DarOne instances. Here, we load up those seed files. 
 ```
 # load seed files - these are from global darwin runs
 # yearly average!  
@@ -396,7 +396,7 @@ This is the experiment that inspired the ability to hold the nutients readily av
 
 ## Overview 
 
-We will run a 30x30 grid of DAR1s each initialized with the same plankton community and nutrients, with the exception of nitrate and phosphate. Nitrate levels in each grid cell will increase along one axis, while phosphate levels will increase along the y-axis. Nutrient values are grabbed from the MITgcm Darwin output, but with iron at 100x and all other nutrients at 10x, and other sources of nitrogen besides NO3 (NO2, NH4, and DON) set to zero. The goal is to flood the system with nutrients, making sure it that nitogen and phosphate are the limiting factors. The simulation is run forward for 5 years with the average of the last year taken to represent the steady state result. 
+We will run a 30x30 grid of DarOne instances each initialized with the same plankton community and nutrients, with the exception of nitrate and phosphate. Nitrate levels in each grid cell will increase along one axis, while phosphate levels will increase along the y-axis. Nutrient values are grabbed from the MITgcm Darwin output, but with iron at 100x and all other nutrients at 10x, and other sources of nitrogen besides NO3 (NO2, NH4, and DON) set to zero. The goal is to flood the system with nutrients, making sure it that nitogen and phosphate are the limiting factors. The simulation is run forward for 5 years with the average of the last year taken to represent the steady state result. 
 
 ## Code Walkthrough 
 From the `/dar_one_docker/Dar_One/case_studies` directory, we can open the nitrogen_fixers_build.jl file with vim. Because we are changing the number of grid cells we are running, we have to build the model again with these new dimensions. 
@@ -439,9 +439,9 @@ Now we will take a look at the `nitrogen_fixers_run.jl` file. Open it using the 
 ```bash
 vim nitrogen_fixers_run.jl
 ```
-First up in the file is the import statements for Dar1 and other packages. 
+First up in the file is the import statements for DarOne and other packages. 
 
-Next we do the typical set-up for a DAR1 run - set the path for MITgcm to point to where the MITgcm code is, choose a unique config name for the experiment, and set up the config object. 
+Next we do the typical set-up for a DarOne run - set the path for MITgcm to point to where the MITgcm code is, choose a unique config name for the experiment, and set up the config object. 
 
 ```
 # set path to MITgcm 

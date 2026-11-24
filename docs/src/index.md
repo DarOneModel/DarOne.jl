@@ -5,11 +5,11 @@
 Darwin has many ways to control and tweak a simulation. You can change things such as how hot or cold
 it is, the intensity of the sunlight, how much of a nutrient is available, etc. Below you will find an explanation of the most commonly used parameters to design your own unique experiments! 
 
-In order to modify the run-time parameters for `dar_one`, you first need to create and save a unique [`MITgcm_config`](@ref) object, along with running the `setup` method. This sets up a folder with sub-folders where all the input files live and where the output will be saved. The `MITgcm_config` object holds a reference to these folders, so you don't have to remember the whole filepath. 
+In order to modify the run-time parameters for `DarOne`, you first need to create and save a unique [`MITgcm_config`](@ref) object, along with running the `setup` method. This sets up a folder with sub-folders where all the input files live and where the output will be saved. The `MITgcm_config` object holds a reference to these folders, so you don't have to remember the whole filepath. 
 To create and setup the `MITgcm_config` object, use the following code:
 ```
 # create config object 
-project_name = "dar_one_example"
+project_name = "darone_example"
 config_obj, rundir = create_MITgcm_config(project_name)
 setup(config_obj)
 ```
@@ -22,10 +22,10 @@ See [`create_MITgcm_config`](@ref).
 ## Timing 
 
 As with any biogeochemical simulation, you have to choose how long you want the model to run. With
-`Dar_One`, frequently the goal is to run the model until it reaches a steady-state or oscillatory steady-state. This can take any number of years depending on how close your initial conditions are to
+`DarOne`, frequently the goal is to run the model until it reaches a steady-state or oscillatory steady-state. This can take any number of years depending on how close your initial conditions are to
 the steady-state. 
 
-`Dar_One` thinks about time either in "iterations" or seconds. It is configured to run in 3-hour time steps,
+`DarOne` thinks about time either in "iterations" or seconds. It is configured to run in 3-hour time steps,
 and each of those steps is an iteration. The default is for it to run for a year (360 days, 2880 iterations).
 To change this value, use the [`update_end_time`](@ref) function.
 ```
@@ -40,7 +40,7 @@ the longer the run will take.
 To update the diagnostic write frequency, use the method [`update_diagnostic_freq`](@ref). The value 
 it takes is in seconds, so to get output every month you would use 2592000. Every year would be 31104000. 
 
-For now, `diagnostic_num` refers to which diagnostic you're changing. `Dar_One` outputs many diagnostic files 
+For now, `diagnostic_num` refers to which diagnostic you're changing. `DarOne` outputs many diagnostic files 
 that contain various info, but the most commonly used one is the `3d` file. This file contains all the tracer information, such as nutrient concentrations and plankton biomass. For `3d` the `diagnostic_num` is 1.
 
 ```
@@ -96,13 +96,13 @@ Biology
 
 Using a "Seed" netCDF File 
 
-Often, I use the output of a global Darwin run to initialize (or seed) the values of DAR1. A set of annual-mean Darwin surface tracer values ships with DAR1 as `data/darwin/surface_tracers.nc` (alongside `surface_temperature.nc` and `par_upper4.nc`). When working with netCDF files, I use the package NCDatasets. 
+Often, I use the output of a global Darwin run to initialize (or seed) the values of DarOne. A set of annual-mean Darwin surface tracer values ships with DarOne as `data/darwin/surface_tracers.nc` (alongside `surface_temperature.nc` and `par_upper4.nc`). When working with netCDF files, I use the package NCDatasets. 
 
 First, we need to include NCDatasets, then load up the contents of the file into a Dataset.
 ```
 using NCDatasets
 
-seed_file_3d = "path/to/Dar_One/data/darwin/surface_tracers.nc"
+seed_file_3d = "path/to/DarOne.jl/data/darwin/surface_tracers.nc"
 seed_ds_3d = Dataset(seed_file_3d)
 ```
 To be finished soon... 
