@@ -4,7 +4,7 @@
 This is a very simple tutorial, so I'll walk you through line-by-line whats going on in the 
 `2_run_example.jl` file. 
 
-If you're using docker, to open up the file using the commandline, run 
+If you're using docker, first navigate to the tutorial directory with `cd /dar_one_docker/Dar_One/beginner_tutorial`. To open up the file using the commandline, run 
 `# vim 2_run_example.jl`. Then you can use [vim commands](https://coderwall.com/p/adv71w/basic-vim-commands-for-getting-started) to explore and edit the file. 
 
 (1) First, we have to import our dependencies.
@@ -55,7 +55,7 @@ For this tutorial, we are keeping it simple. First, we are going to specify how 
 ```
 # length of run 
 end_time = 2880 # one year, in iterations
-update_end_time(end_time, config_obj)
+update_end_time(config_obj, end_time)
 ```
 Next we will set the temperature to a constant value. 
 ```

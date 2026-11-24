@@ -1,0 +1,112 @@
+name: Docker
+
+on:
+  push:
+    branches: [main]
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docker:
+    if: github.event_name == 'pull_request' || (github.ref != 'refs/heads/main' && github.ref_type != 'tag')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
+    steps:
+      - &checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - &setup
+        uses: docker/setup-buildx-action@v4
+
+      - &build
+        name: Build image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          load: true
+          tags: darone:ci
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha,scope=darone-amd64
+          cache-to: type=gha,scope=darone-amd64,mode=max,ignore-error=true
+
+      - &smoke
+        name: Run beginner tutorial in the built image
+        run: docker run --rm --network none darone:ci bash Dar_One/test/docker_smoke.sh
+
+  publish:
+    if: github.event_name != 'pull_request' && github.event.deleted != true && (github.ref == 'refs/heads/main' || github.ref_type == 'tag')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      packages: write
+    # Serialize publication of each tag, including manual re-runs.
+    concurrency:
+      group: ${{ github.workflow }}-publish-${{ github.ref }}
+      queue: max
+    steps:
+      - *checkout
+
+      - name: Validate release version
+        if: github.ref_type == 'tag'
+        shell: bash
+        run: |
+          version=$(python3 -c 'import tomllib; print(tomllib.load(open("Project.toml", "rb"))["version"])')
+          if [[ ! "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ || "$GITHUB_REF_NAME" != "v$version" ]]; then
+            echo "Release tag $GITHUB_REF_NAME does not match a stable package version v$version" >&2
+            exit 1
+          fi
+
+      - *setup
+      - *build
+      - *smoke
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish tested image
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/darone"
+          target="$image:$GITHUB_REF_NAME"
+          if [[ "$GITHUB_REF" == refs/heads/main ]]; then
+            # An older re-run must not replace the image from a newer main commit.
+            head=$(git ls-remote --exit-code origin refs/heads/main | cut -f1)
+            if [[ "$GITHUB_SHA" != "$head" ]]; then
+              echo "Skipping publication: main has advanced to $head"
+              exit 0
+            fi
+          else
+            # Preserve released images, even if dependency resolution changes on a re-run.
+            if inspection=$(docker buildx imagetools inspect --format '{{json .Image}}' "$target" 2>&1); then
+              revision=$(printf '%s' "$inspection" | python3 -c 'import json, sys; print(json.load(sys.stdin)["config"]["Labels"]["org.opencontainers.image.revision"])')
+              if [[ "$revision" != "$GITHUB_SHA" ]]; then
+                echo "Refusing to replace $target: already published from $revision" >&2
+                exit 1
+              fi
+              echo "$target is already published; preserving the original image"
+              exit 0
+            elif [[ "$inspection" != "ERROR: $target: not found" ]]; then
+              echo "Unable to verify that $target is unpublished: $inspection" >&2
+              exit 1
+            fi
+          fi
+          docker tag darone:ci "$target"
+          docker push "$target"

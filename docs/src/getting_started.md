@@ -58,6 +58,8 @@ DarOne can be run in one of two ways.
 
 You're now ready for the [beginner tutorial](https://daronemodel.github.io/DarOne.jl/build/beginner_tutorials/)!
 
+To build and test the image from a DarOne.jl checkout, see [Building the Docker image from source](https://github.com/DarOneModel/DarOne.jl#building-the-docker-image-from-source).
+
 
 ## Setting up on local machine
 
@@ -114,31 +116,7 @@ The Julia dependencies are listed in `DarOne.jl/Project.toml`. You can automatic
 
 If you get errors when building the model, see the [MITgcm getting started guide](https://mitgcm.readthedocs.io/en/latest/getting_started/getting_started.html#) to help troubleshoot.  
 
-You can also see the dockerfile used [here](https://github.com/DarOneModel/DarOne.jl/blob/main/Dockerfile)
-
-```
-FROM --platform=linux/amd64 ubuntu:latest 
-WORKDIR /dar_one_docker
-COPY . . 
-
-RUN apt-get update -y
-RUN apt-get install wget -y
-RUN apt-get install vim -y
-
-# download, install, and link julia 
-RUN wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.13-linux-x86_64.tar.gz
-RUN tar zxvf julia-1.10.13-linux-x86_64.tar.gz
-ENV PATH="${PATH}:/dar_one_docker/julia-1.10.13/bin"
-# install julia packages 
-ENV JULIA_PROJECT=/dar_one_docker/Dar_One
-RUN julia --project=/dar_one_docker/Dar_One -e 'using Pkg; Pkg.instantiate()'
-
-# other dependencies 
-RUN apt-get install -y gfortran make 
-RUN apt-get install -y python-is-python3
-# future: try netcdf-bin instead? does it still work? 
-RUN apt-get install -y libnetcdff-dev 
-```
+You can also see the [Dockerfile](https://github.com/DarOneModel/DarOne.jl/blob/main/Dockerfile) for the build dependencies.
 
 # Workflow
 
