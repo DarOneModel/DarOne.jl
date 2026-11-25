@@ -99,10 +99,12 @@ The example test runner executes all nine beginner tutorial and case-study scrip
 DARONE_MITGCM_PATH=/path/to/darwin3 julia --project=. test/test_examples.jl
 ```
 
-# Contributing 
+# Contributing
 
-We have three main branches: `main`, `test`, and `dev`.
+We're excited you're here and want to contribute.
 
-All other branches are feature branches. Once a feature has been implemented, tested, and documented you can make a pull request to merge it into the `dev` branch. 
+We welcome all contributions, from documentation to testing to writing code. Don't let trying to be perfect get in the way of being good – exciting ideas are more important than perfect pull requests.
 
-`main` is the most stable version of the code. This branch is used for the docker image. 
+In the first instance, we encourage you to open [a GitHub issue](https://github.com/DarOneModel/DarOne.jl/issues).
+
+If you are comfortable contributing code directly, please open [a GitHub pull request](https://github.com/DarOneModel/DarOne.jl/pulls). For best practices, please see the contributing guidelines developed by [The Turing Way](https://book.the-turing-way.org/community-handbook/contributing/).
