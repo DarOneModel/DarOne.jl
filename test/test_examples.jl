@@ -1,7 +1,7 @@
-using Test
+using Test, DarOne
 
 const ROOT = normpath(joinpath(@__DIR__, ".."))
-const DARWIN = abspath(get(ENV, "DARONE_MITGCM_PATH", "/dar_one_docker/darwin3"))
+const DARWIN = darwin_root()
 const CONFIG_ROOT = joinpath(DARWIN, "verification", "dar_one_config")
 const RUN_ROOT = joinpath(CONFIG_ROOT, "run")
 const RUN_SUFFIX = "-test-$(getpid())-$(time_ns())"

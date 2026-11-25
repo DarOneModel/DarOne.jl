@@ -35,8 +35,8 @@ function testreport(config::MITgcm_config,ext="")
         lst=[exps[i].configuration for i in 1:length(exps)]
     end
     for nm in lst
-        c=`$(MITgcm_path[1])/verification/testreport -t $(MITgcm_path[1])/verification/$(nm) $ext`
-        isempty(ext) ? c=`$(MITgcm_path[1])/verification/testreport -t $(MITgcm_path[1])/verification/$(nm)` : nothing
+        c=`$(darwin_root())/verification/testreport -t $(darwin_root())/verification/$(nm) $ext`
+        isempty(ext) ? c=`$(darwin_root())/verification/testreport -t $(darwin_root())/verification/$(nm)` : nothing
         run(c)
     end
     cd(pth)
@@ -84,7 +84,7 @@ function build(config_name::String)
         cd()
     end
     pth=pwd()
-    build_dir = joinpath(MITgcm_path[1], "verification", nam, "build")
+    build_dir = joinpath(darwin_root(), "verification", nam, "build")
     cd(build_dir)
     @info "$(Threads.threadid()) Build Directory: $(build_dir)!"
     # clean out build folder 
@@ -116,7 +116,7 @@ code files, headers, etc  in the `build/` folder before `make` compiles the mode
 function build(config::MITgcm_config,options::String)
     nam=config.configuration
     if options=="--allow-skip"
-        tst=!isfile(joinpath(MITgcm_path[1],"verification",nam,"build","mitgcmuv"))
+        tst=!isfile(joinpath(darwin_root(),"verification",nam,"build","mitgcmuv"))
         tst ? build(config) : nothing
     else
         build(config)
@@ -139,7 +139,7 @@ function compile(config::MITgcm_config)
         cd()
     end
     pth=pwd()
-    cd("$(MITgcm_path[1])/verification/$(nam)/build")
+    cd("$(darwin_root())/verification/$(nam)/build")
     try
         @suppress run(`make -j 4`)
     catch e
@@ -187,7 +187,7 @@ function setup(config::MITgcm_config)
     end
 
     # links data* files in /run/UUID/run to /{config}/input 
-    p="$(MITgcm_path[1])/verification/$(config.configuration)/input"
+    p="$(darwin_root())/verification/$(config.configuration)/input"
     tmpA=readdir(p)
     f=tmpA[findall([!isfile(joinpath(pth_run,tmpA[i])) for i in 1:length(tmpA)])]
     [symlink(joinpath(p,f[i]),joinpath(pth_run,f[i])) for i in 1:length(f)]
@@ -206,11 +206,11 @@ function setup(config::MITgcm_config)
         meta = split(meta,"\n")
         ii=findall(occursin.("../../",meta))
         for i in ii
-            meta[i]=replace(meta[i],"../../" => "$(MITgcm_path[1])/verification/")
+            meta[i]=replace(meta[i],"../../" => "$(darwin_root())/verification/")
         end
         ii=findall(occursin.("../",meta))
         for i in ii
-            meta[i]=replace(meta[i],"../" => "$(MITgcm_path[1])/verification/$(config.configuration)")
+            meta[i]=replace(meta[i],"../" => "$(darwin_root())/verification/$(config.configuration)")
         end
 
         #rm old file from run dir
@@ -241,11 +241,11 @@ function setup(config::MITgcm_config)
         meta = split(meta,"\n")
         ii=findall(occursin.("../../",meta))
         for i in ii
-            meta[i]=replace(meta[i],"../../" => "$(MITgcm_path[1])/verification/")
+            meta[i]=replace(meta[i],"../../" => "$(darwin_root())/verification/")
         end
         ii=findall(occursin.("../",meta))
         for i in ii
-            meta[i]=replace(meta[i],"../" => "$(MITgcm_path[1])/verification/$(config.configuration)/")
+            meta[i]=replace(meta[i],"../" => "$(darwin_root())/verification/$(config.configuration)/")
         end
         #rm old file from run dir
         rm(fil)
@@ -257,7 +257,7 @@ function setup(config::MITgcm_config)
     end
 
     if !islink(joinpath(pth_run,"mitgcmuv"))
-        f="$(MITgcm_path[1])/verification/$(config.configuration)/build/mitgcmuv"
+        f="$(darwin_root())/verification/$(config.configuration)/build/mitgcmuv"
         symlink(f,joinpath(pth_run,"mitgcmuv")) 
     end
 

@@ -24,7 +24,6 @@ Documentation for the darwin3 MITgcm fortran model can be found [here](https://d
 DarOne.jl is a tool for designing and running experiments simulating the marine microbiome within a single cube of water. The biogeochemical forcing is powered by the [MIT Darwin Model](https://darwinproject.mit.edu/), and DarOne.jl provides a Julia interface to build, configure, and run experiments with a simple, streamlined workflow. DarOne.jl is composed of two main parts:
 
 - [DarOne.jl](https://github.com/DarOneModel/DarOne.jl) - Julia interface for organizing experiments and setting up parameters for model runs
-    - `MITgcm_path` variable should point to darwin3
 - [darwin3](https://github.com/darwinproject/darwin3) - MITgcm source code set up to include all things Darwin 
     - `DarOne_config` - folder for the base configuration files for DarOne, which lives in the darwin3/verification/ folder. ([DarOne_config github](https://github.com/barbara42/dar_one_config))
 
@@ -41,17 +40,17 @@ DarOne can be run in one of two ways.
 - Run the docker application, which will start up the docker "daemon" 
 - The docker daemon must be running in order to download the DarOne image
 
-(2) Get the [DarOne docker image](https://hub.docker.com/r/birdy1123/dar1).
+(2) Get the DarOne Docker image from GitHub Container Registry.
 - using the command line, run 
 
-    `docker pull birdy1123/dar1`
+    `docker pull ghcr.io/daronemodel/darone:main`
 
-- If you go to the "Images" tab in the docker desktop UI, you should see "birdy1123/dar1"
+- If you go to the "Images" tab in the docker desktop UI, you should see "ghcr.io/daronemodel/darone:main"
 
 (3) Run a container based on the DarOne docker image
 - using the command line, run 
 
-    `docker run -it birdy1123/dar1` 
+    `docker run -it ghcr.io/daronemodel/darone:main`
 - this runs the container in interactive mode (`-i`) with terminal access (`-t`) 
 - you should see the prompt change to `root@some-number:/dar_one_docker#`
     - if the container is already running, you can connect to it with `docker exec -it [CONTAINER_ID] bash`
@@ -82,6 +81,16 @@ The CI images target `linux/amd64`. On Apple Silicon, Docker can run these image
 
 See instructions in the documentation: https://daronemodel.github.io/DarOne.jl/build/getting_started/#Setting-up-on-local-machine
 
+After checking out the supported Darwin3 and `dar_one_config` revisions, configure the source path once:
+
+```julia
+using DarOne
+set_darwin_path("/path/to/darwin3")
+```
+
+This setting is saved for the current Julia environment. The configuration repository
+should be at `darwin3/verification/dar_one_config`. CI can also use `DARONE_MITGCM_PATH`.
+
 ## Example integration tests
 
 The example test runner executes all nine beginner tutorial and case-study scripts, including Fortran builds, simulations, and the tutorial plot. It uses Darwin reference inputs and short simulation durations. Run it with a Darwin checkout containing `verification/dar_one_config` and a working GNU Fortran toolchain:
@@ -90,10 +99,12 @@ The example test runner executes all nine beginner tutorial and case-study scrip
 DARONE_MITGCM_PATH=/path/to/darwin3 julia --project=. test/test_examples.jl
 ```
 
-# Contributing 
+# Contributing
 
-We have three main branches: `main`, `test`, and `dev`.
+We're excited you're here and want to contribute.
 
-All other branches are feature branches. Once a feature has been implemented, tested, and documented you can make a pull request to merge it into the `dev` branch. 
+We welcome all contributions, from documentation to testing to writing code. Don't let trying to be perfect get in the way of being good – exciting ideas are more important than perfect pull requests.
 
-`main` is the most stable version of the code. This branch is used for the docker image. 
+In the first instance, we encourage you to open [a GitHub issue](https://github.com/DarOneModel/DarOne.jl/issues).
+
+If you are comfortable contributing code directly, please open [a GitHub pull request](https://github.com/DarOneModel/DarOne.jl/pulls). For best practices, please see the contributing guidelines developed by [The Turing Way](https://book.the-turing-way.org/community-handbook/contributing/).

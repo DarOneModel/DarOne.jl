@@ -5,7 +5,7 @@ set -euo pipefail
 test "$(pwd)" = /dar_one_docker
 test "$DARONE_MITGCM_PATH" = /dar_one_docker/darwin3
 cd /tmp
-julia --startup-file=no -e 'using DarOne; @assert Base.active_project() == "/dar_one_docker/Dar_One/Project.toml"; @assert pathof(DarOne) == "/dar_one_docker/Dar_One/src/DarOne.jl"'
+julia --startup-file=no -e 'using DarOne; @assert Base.active_project() == "/dar_one_docker/Dar_One/Project.toml"; @assert pathof(DarOne) == "/dar_one_docker/Dar_One/src/DarOne.jl"; @assert darwin_root() == ENV["DARONE_MITGCM_PATH"]'
 cd /dar_one_docker
 
 source Dar_One/darwin-sources.env

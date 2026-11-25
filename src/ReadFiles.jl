@@ -175,7 +175,7 @@ Read a `MITgcm` namelist file, parse it, and return as a NamedTuple
 ```
 using DarOne
 testreport("advect_xy")
-fil=joinpath(MITgcm_path[1],"verification","advect_xy","run","data")
+fil=joinpath(darwin_root(),"verification","advect_xy","run","data")
 namelist=read_namelist(fil)
 ```
 """
@@ -284,7 +284,7 @@ Save a `MITgcm` namelist file. In the example below, one is read from file, modi
 
 ```
 using DarOne
-fil=joinpath(MITgcm_path[1],"verification","advect_xy","run","data")
+fil=joinpath(darwin_root(),"verification","advect_xy","run","data")
 nml=read_namelist(fil)
 write_namelist(fil*"_new",namelist)
 ```

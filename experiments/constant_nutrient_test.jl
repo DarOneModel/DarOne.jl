@@ -4,7 +4,6 @@ using ClimateModels
 
 
 # path to local Darwin version of the MITgcm
-MITgcm_path[1] = "/dar_one_docker/darwin3" # CHANGE ME (unless using docker)
 
 # set nutrients constant 
 hold_nutrients_constant(zeros(19))
