@@ -12,3 +12,9 @@ makedocs(
     ]
 )
 
+deploydocs(
+    repo = "github.com/DarOneModel/DarOne.jl.git",
+    devbranch = "main",
+    dirname = "build",
+    versions = nothing,
+)

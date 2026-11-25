@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: docs-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -16,14 +16,10 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
     env:
       JULIA_PKG_PRECOMPILE_AUTO: '0'
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          persist-credentials: false
       - uses: julia-actions/setup-julia@v3
         with:
           version: '1.10'
@@ -34,34 +30,8 @@ jobs:
       - name: Install documentation dependencies
         run: julia --project=docs -e 'using Pkg; Pkg.develop(path=pwd()); Pkg.instantiate()'
 
-      - name: Build documentation
+      - name: Build and deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
         run: julia --project=docs docs/make.jl
-
-      - name: Prepare GitHub Pages site
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-        run: |
-          mkdir -p _site
-          cp -R docs/build _site/build
-          printf '%s\n' '<!doctype html><meta charset="utf-8"><title>DarOne.jl documentation</title><meta http-equiv="refresh" content="0; url=build/getting_started/"><a href="build/getting_started/">DarOne.jl documentation</a>' > _site/index.html
-
-      - name: Upload GitHub Pages artifact
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: _site
-
-  deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: build
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy documentation
-        id: deployment
-        uses: actions/deploy-pages@v4
