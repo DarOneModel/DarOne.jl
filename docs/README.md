@@ -1,23 +1,17 @@
-# Documentation Info 
+# Documentation Info
 
-Documentation is build using [Documenter](https://github.com/JuliaDocs/Documenter.jl) 
+Documentation is built using [Documenter](https://github.com/JuliaDocs/Documenter.jl).
 
-Documentation is published from the `gh-pages` branch. 
+The [Documentation workflow](../.github/workflows/docs.yml) builds the docs on pull requests and publishes successful builds from `main` to GitHub Pages, retaining the existing `/build/` URLs. It can also be run manually from the Actions tab. In the repository's Settings > Pages, set the publishing source to **GitHub Actions**.
 
-`gh-pages` contains the build directory and all built pages. No other branch should contain /docs/build 
+Workflow for updating documentation:
+- Modify `make.jl` or files in the `src` folder.
+- Build the docs locally from the root of DarOne.jl:
 
-Workflow for updating documentation 
-- modify `make.jl` or  files in `/src` folder 
-- build the docs 
-    - from the `DarOne.jl` folder, run `julia --project=docs -e 'using Pkg; Pkg.develop(path=pwd()); Pkg.instantiate()'` to set up the documentation environment
-    - run command `julia --project=docs docs/make.jl`
-- check that everything looks good and works well! 
-- create a PR to the `test` branch (should NOT contain docs/build folder)
-    - PR merged into `test` 
+  ```bash
+  julia --project=docs -e 'using Pkg; Pkg.develop(path=pwd()); Pkg.instantiate()'
+  julia --project=docs docs/make.jl
+  ```
 
-
-when committing to `gh-pages` branch, include the build folder. You have to override the .gitignore by using the "force" option, -f 
-
-when changes are pushed to `gh-pages`, documentation will be automatically deployed 
-
-
+- Check the generated pages in `docs/build`.
+- Open a pull request with the source changes. The generated `docs/build` folder should remain untracked.

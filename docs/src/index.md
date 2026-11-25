@@ -62,7 +62,7 @@ The term "tracer" refers to anything that's in the water that isn't H2O itself. 
 
 If the tracer you want to update doesn't have its own function, you can update any tracer you know the "id" of using the following function. Tracer IDs can be found under Darwin Background > [Tracers](https://daronemodel.github.io/DarOne.jl/build/darwin_background/#Nutrients-TRAC01-TRAC20)
 
-```@docs
+```@docs; canonical=false
 update_tracer
 ```
 
@@ -109,7 +109,7 @@ To be finished soon...
 
 ## Update Generic Parameter  
 
-```@docs
+```@docs; canonical=false
 update_param
 ```
 
