@@ -43,7 +43,7 @@ jobs:
 
       - &smoke
         name: Run beginner tutorial in the built image
-        run: docker run --rm --network none darone:ci bash Dar_One/test/docker_smoke.sh
+        run: docker run --rm --network none darone:ci bash DarOne.jl/test/docker_smoke.sh
 
   publish:
     if: github.event_name != 'pull_request' && github.event.deleted != true && (github.ref == 'refs/heads/main' || github.ref_type == 'tag')

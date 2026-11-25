@@ -64,7 +64,7 @@ From the root of a DarOne.jl checkout, build and test the image:
 
 ```bash
 docker build --platform=linux/amd64 -t darone:local .
-docker run --rm --network none darone:local bash Dar_One/test/docker_smoke.sh
+docker run --rm --network none darone:local bash DarOne.jl/test/docker_smoke.sh
 ```
 
 The [Dockerfile](Dockerfile) installs Julia dependencies, checks out the Darwin sources at the revisions in [`darwin-sources.env`](darwin-sources.env), and compiles the beginner model executable. The [Docker CI workflow](.github/workflows/docker.yml) builds and tests the image, publishes `:main` after successful main-branch builds, and publishes `:vX.Y.Z` images matching Julia package releases to GitHub Container Registry.

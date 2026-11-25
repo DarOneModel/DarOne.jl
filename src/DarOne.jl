@@ -60,7 +60,7 @@ export scan_rundir, scan_stdout
     base_configuration
 
 Name of the folder that lives in the /verificaion folder of the MITgcm. This holds the basic 
-configuration for Dar_One, which is a homogenous 1m x 1m x 1m water parcel with air/sea exchange, 
+configuration for DarOne, which is a homogenous 1m x 1m x 1m water parcel with air/sea exchange, 
 no mixing, few nuturients, and no biological forcing. 
 """
 base_configuration = "dar_one_config"

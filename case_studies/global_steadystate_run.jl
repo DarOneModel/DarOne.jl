@@ -86,7 +86,7 @@ for x_idx in x_idxs
         # create initial temperatures from the Darwin annual mean
         temp_matrix = seed_ds_temp["Ttave"][x, y, z, t]
         init_temperature_grid(config_obj, temp_matrix)
-        # The reference grid contains zero-temperature land cells, which DAR1 treats as wet.
+        # The reference grid contains zero-temperature land cells, which DarOne treats as wet.
         update_param(config_obj, "data", "PARM05", "checkIniTemp", false)
 
         # create bin files for light 

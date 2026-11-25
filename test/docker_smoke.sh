@@ -5,17 +5,17 @@ set -euo pipefail
 test "$(pwd)" = /dar_one_docker
 test "$DARONE_MITGCM_PATH" = /dar_one_docker/darwin3
 cd /tmp
-julia --startup-file=no -e 'using DarOne; @assert Base.active_project() == "/dar_one_docker/Dar_One/Project.toml"; @assert pathof(DarOne) == "/dar_one_docker/Dar_One/src/DarOne.jl"; @assert darwin_root() == ENV["DARONE_MITGCM_PATH"]'
+julia --startup-file=no -e 'using DarOne; @assert Base.active_project() == "/dar_one_docker/DarOne.jl/Project.toml"; @assert pathof(DarOne) == "/dar_one_docker/DarOne.jl/src/DarOne.jl"; @assert darwin_root() == ENV["DARONE_MITGCM_PATH"]'
 cd /dar_one_docker
 
-source Dar_One/darwin-sources.env
+source DarOne.jl/darwin-sources.env
 config_path="$DARONE_MITGCM_PATH/verification/dar_one_config"
 test "$(git -C "$DARONE_MITGCM_PATH" rev-parse HEAD)" = "$DARWIN_REV"
 test "$(git -C "$config_path" rev-parse HEAD)" = "$DARONE_CONFIG_REV"
 test -x "$config_path/build/mitgcmuv"
 
 # Follow the documented tutorial commands using the precompiled model.
-cd Dar_One/beginner_tutorial
+cd DarOne.jl/beginner_tutorial
 export DARONE_EXAMPLE_ITERATIONS=12 DARONE_EXAMPLE_ID_SUFFIX=-docker-smoke
 export GKSwstype=100
 plot_dir=$(mktemp -d)
@@ -39,7 +39,7 @@ julia --startup-file=no --project=.. 3_plotting_example.jl
 test -s "$DARONE_PLOT_FILE"
 
 # Check the documented case-study directory and its bundled reference inputs.
-cd /dar_one_docker/Dar_One/case_studies
+cd /dar_one_docker/DarOne.jl/case_studies
 for file in surface_tracers.nc surface_temperature.nc par_upper4.nc; do
     test -s "../data/darwin/$file"
 done
