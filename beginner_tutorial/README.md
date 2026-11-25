@@ -23,6 +23,7 @@ If you're using the `dar_one_docker`...
 If you're doing it locally... 
 - install julia dependencies
     - from the `Dar_One` folder run `julia --project=. -e 'using Pkg; Pkg.instantiate()'` 
+- configure the Darwin3 path once as described in [local setup](../README.md#setting-up-on-local-machine)
 - from the `Dar_One` folder run `julia --project=. beginner_tutorial/1_build_example.jl`
 
 ## Setting up run folders 
@@ -33,7 +34,7 @@ This is a very simple tutorial, so I'll walk you through line-by-line whats goin
 If you're using docker, to open up the file using the commandline, run 
 `# vim 2_run_example.jl`. Then you can use [vim commands](https://coderwall.com/p/adv71w/basic-vim-commands-for-getting-started) to explore and edit the file. 
 
-(1) First, we have to import our dependencies.
+First, we have to import our dependencies.
 
 ```
 # DarOne
@@ -43,12 +44,6 @@ using ClimateModels
 ```
 The `using` statement loads `DarOne` from the project environment (selected with `--project=..` when running from `beginner_tutorial`).
 
-(2) Configure the Darwin3 source location once with `set_darwin_path`. This tells DarOne where
-to look for the Darwin MITgcm code. In the Docker container, configure `/dar_one_docker/darwin3`; otherwise use the path to your local checkout.
-```
-# the path to the Darwin version of the MITgcm 
-set_darwin_path("/path/to/darwin3") # Run once per Julia environment
-```
 Next, we create a unique identifier for our run. 
 ```
 # unique name for your run 
