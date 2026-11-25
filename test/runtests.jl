@@ -1,4 +1,5 @@
 using DarOne
 
+include("test_paths.jl")
 include("test_mnc.jl")
 include("test_examples.jl")

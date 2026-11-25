@@ -9,9 +9,10 @@ using NCDatasets
 
 # load seed files - these are from global darwin runs
 # yearly average!  
-seed_file_3d = "/Users/birdy/Documents/eaps_research/gcm_analysis/gcm_data/darwin_yearly_avg/3d.nc"
-seed_file_temp = "/Users/birdy/Documents/eaps_research/gcm_analysis/gcm_data/darwin_yearly_avg/tave.nc"
-seed_file_par = "/Users/birdy/Documents/eaps_research/gcm_analysis/gcm_data/darwin_yearly_avg/par.nc"
+seed_dir = pkgdir(DarOne, "data", "darwin")
+seed_file_3d = joinpath(seed_dir, "surface_tracers.nc")
+seed_file_temp = joinpath(seed_dir, "surface_temperature.nc")
+seed_file_par = joinpath(seed_dir, "par_upper4.nc")
 seed_ds_3d = Dataset(seed_file_3d)
 seed_ds_temp = Dataset(seed_file_temp)
 seed_ds_par = Dataset(seed_file_par)
