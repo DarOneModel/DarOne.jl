@@ -2,6 +2,7 @@
 
 [![Tests](https://github.com/DarOneModel/DarOne.jl/actions/workflows/tests.yml/badge.svg)](https://github.com/DarOneModel/DarOne.jl/actions/workflows/tests.yml)
 [![Docker](https://github.com/DarOneModel/DarOne.jl/actions/workflows/docker.yml/badge.svg)](https://github.com/DarOneModel/DarOne.jl/actions/workflows/docker.yml)
+[![Documentation](https://github.com/DarOneModel/DarOne.jl/actions/workflows/docs.yml/badge.svg)](https://github.com/DarOneModel/DarOne.jl/actions/workflows/docs.yml)
 
 Built off of Gael Forget's MITgcmTools! (https://github.com/gaelforget/MITgcmTools.jl)
 

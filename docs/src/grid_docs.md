@@ -31,10 +31,10 @@ Update SIZE.h file
     - delX=X*1.E0,
     - delY=Y*1.E0,
     
-```@docs
+```@docs; canonical=false
 update_delX_delY_for_grid
 ```
 
-```@docs
+```@docs; canonical=false
 init_tracer_grid
 ```
