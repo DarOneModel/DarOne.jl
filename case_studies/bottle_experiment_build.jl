@@ -3,8 +3,6 @@ using DarOne
 using ClimateModels
 using NCDatasets
 
-# the path to the Darwin version of the MITgcm
-
 nX = 1
 nY = 1
 

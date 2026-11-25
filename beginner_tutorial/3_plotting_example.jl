@@ -2,8 +2,6 @@ using DarOne
 using NCDatasets
 using Plots
 
-# the path to the Darwin version of the MITgcm
-
 # the unique name of your run 
 project_name = "beginner_tutorial-pro-syn-2" * get(ENV, "DARONE_EXAMPLE_ID_SUFFIX", "")
 
