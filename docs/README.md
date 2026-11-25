@@ -2,8 +2,7 @@
 
 Documentation is built using [Documenter](https://github.com/JuliaDocs/Documenter.jl).
 
-The [Documentation workflow](../.github/workflows/docs.yml) builds the docs on pull requests and publishes successful builds from `main` to GitHub Pages, retaining the existing `/build/` URLs. It can also be run manually from the Actions tab. In the repository's Settings > Pages, set the publishing source to **GitHub Actions**.
-
+Documentation is built automatically on pull requests and published to GitHub Pages when changes are merged into main.
 Workflow for updating documentation:
 - Modify `make.jl` or files in the `src` folder.
 - Build the docs locally from the root of DarOne.jl:
