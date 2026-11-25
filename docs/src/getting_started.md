@@ -11,7 +11,6 @@ DarOne Model Configuration: The DarOne system models a single, well mixed parcel
 DarOne is composed of three main parts: the MITgcm Darwin code, a configuration made for DarOne, and the julia interface to modify the configuration and run the model. 
 
 - [DarOne.jl](https://github.com/DarOneModel/DarOne.jl) - Julia interface for organizing experiments and setting up parameters for model runs
-    - Set the Darwin3 location once using `set_darwin_path(path)`
 - [darwin3](https://github.com/darwinproject/darwin3) - MITgcm source code set up to include all things Darwin 
     - `dar_one_config` - folder for the base configuration files for DarOne, which lives in the darwin3/verification/ folder. ([DarOne_config github](https://github.com/barbara42/dar_one_config))
 
@@ -41,25 +40,22 @@ DarOne can be run in one of two ways.
 - Run the docker application, which will start up the docker "daemon" 
 - The docker daemon must be running in order to download the DarOne image and to start up a container
 
-(2) Get the [DarOne docker image](https://hub.docker.com/r/birdy1123/dar1).
+(2) Get the DarOne Docker image from GitHub Container Registry.
 - using the command line, run 
 
-    `docker pull birdy1123/dar1`
+    `docker pull ghcr.io/daronemodel/darone:main`
 
-- If you go to the "Images" tab in the docker desktop UI, you should see "birdy1123/dar1"
+- If you go to the "Images" tab in the docker desktop UI, you should see "ghcr.io/daronemodel/darone:main"
 
 (3) Run a container based on the DarOne docker image
 - using the command line, run 
 
-    `docker run -it birdy1123/dar1` 
+    `docker run -it ghcr.io/daronemodel/darone:main`
 - this runs the container in interactive mode (`-i`) with terminal access (`-t`) 
 - you should see the prompt change to `root@some-number:/dar_one_docker#`
 - once the container is running, you can also connect to a new bash terminal inside the container using the command `docker exec -it container_id /bin/bash`. The container id can be found in the Docker desktop app or the "some-number" that appears in the previous bullet point. 
 
 You're now ready for the [beginner tutorial](https://daronemodel.github.io/DarOne.jl/build/beginner_tutorials/)!
-
-To build and test the image from a DarOne.jl checkout, see [Building the Docker image from source](https://github.com/DarOneModel/DarOne.jl#building-the-docker-image-from-source).
-
 
 ## Setting up on local machine
 
@@ -114,6 +110,15 @@ For the Julia code, you will need to install julia and the packages declared in 
 
 The Julia dependencies are listed in `DarOne.jl/Project.toml`. You can automatically install the Julia dependencies from the `DarOne.jl` folder by running `julia --project=. -e 'using Pkg; Pkg.instantiate()'`.
 
+From the `DarOne.jl` folder, start Julia with `julia --project=.` and configure the Darwin3 path once for this environment:
+
+```julia
+using DarOne
+set_darwin_path("/path/to/darwin3")
+```
+
+Preferences.jl remembers the path for subsequent Julia sessions.
+
 If you get errors when building the model, see the [MITgcm getting started guide](https://mitgcm.readthedocs.io/en/latest/getting_started/getting_started.html#) to help troubleshoot.  
 
 You can also see the [Dockerfile](https://github.com/DarOneModel/DarOne.jl/blob/main/Dockerfile) for the build dependencies.
@@ -139,13 +144,6 @@ For every DarOne script, you will first import DarOne. Run scripts using `julia 
 using DarOne
 ```
 
-Once per Julia environment, save your Darwin3 path (the checkout must contain `verification/dar_one_config` at the supported revision):
-
-```
-# run this once, using your own Darwin3 location
-set_darwin_path("/path/to/darwin3")
-```
-
 You build with the following function.
 
 ```
@@ -153,7 +151,7 @@ build(base_configuration)
 ```
 Once the model has been built, you can run multiple experiments with different values for the intial parameters. I like to put the previous code in one file, and the code to initialize and run an experiment in another.
 
-For subsequent runs, just import DarOne; the Darwin3 path is remembered.
+For subsequent runs, just import DarOne.
 
 ```
 using DarOne
@@ -176,7 +174,7 @@ run(config_obj)
 ```
 
 To recap the basic workflow: 
-- Import `DarOne`; configure the Darwin3 path once with `set_darwin_path`
+- Import `DarOne`
 - Build
     - set your grid size
     - set nutrients to cycle or stay constant 

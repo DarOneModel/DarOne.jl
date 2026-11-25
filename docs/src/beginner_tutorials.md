@@ -7,7 +7,7 @@ This is a very simple tutorial, so I'll walk you through line-by-line whats goin
 If you're using docker, first navigate to the tutorial directory with `cd /dar_one_docker/Dar_One/beginner_tutorial`. To open up the file using the commandline, run 
 `# vim 2_run_example.jl`. Then you can use [vim commands](https://coderwall.com/p/adv71w/basic-vim-commands-for-getting-started) to explore and edit the file. 
 
-(1) First, we have to import our dependencies.
+First, we have to import our dependencies.
 
 ```
 # DarOne
@@ -17,12 +17,6 @@ using ClimateModels
 ```
 The `using` statement loads `DarOne` from the project environment (selected with `--project=..` when running from `beginner_tutorial`).
 
-(2) Configure Darwin3 once with `set_darwin_path`. This tells DarOne where
-to look for the Darwin MITgcm code. In the Docker container, configure `/dar_one_docker/darwin3`; otherwise use the path to your local checkout.
-```
-# the path to the Darwin version of the MITgcm 
-set_darwin_path("/path/to/darwin3") # Run once per Julia environment
-```
 Next, we create a unique identifier for our run. 
 ```
 # unique name for your run 

@@ -65,9 +65,8 @@ using NCDatasets
 
 This loads up DarOne, then imports it along with the ClimateModels and NCDatasets packages. You will see these lines of code repeated at the top of every file we work with from here on out! 
 
-We configure the Darwin3 directory once with `set_darwin_path`, establish that we are working with a 1x1 parcel of water (instead of running multiple grid cells at once), and we want to allow all nutrients to freely cycle (intead of holding the concentrations in the water constant).
 
-Set your Darwin3 path once (as explained in Getting Started); subsequent scripts reuse the saved preference.
+We establish that we are working with a 1x1 parcel of water (instead of running multiple grid cells at once), and we want to allow all nutrients to freely cycle (intead of holding the concentrations in the water constant).
 
 ```
 # grid dimensions
@@ -98,15 +97,13 @@ vim bottle_experiment_run.jl
 
 We will go through every line of code in this file before we close it and run it from the docker command line. 
 
-Again you will see the lines of code loading and importing DarOne and the NCDatasets and ClimateModels packages, along with the line of code that points to the Darwin fortran directory. 
+Again you will see the lines of code loading and importing DarOne and the NCDatasets and ClimateModels packages.
 
 ```
 using DarOne
 # other packages 
 using ClimateModels
 using NCDatasets
-
-# the path to the Darwin version of the MITgcm
 ```
 
 Next, we load up the files using to set initial values for tracers, taken from a surface point in a global MITgcm Darwin run. Annual-mean versions of these files ship with DAR1 in the `data/darwin` directory (`surface_tracers.nc`, `surface_temperature.nc`, and `par_upper4.nc`), and the case studies read them from there by default. To seed from other Darwin output, set the `DARONE_DATA_DIR` environment variable to a directory containing files with those names.
@@ -251,8 +248,6 @@ The 360 x 160 matrix was divided in 16 parts, each 90 x 40. After running, the 1
 ```
 using DarOne
 using NCDatasets
-
-# set path to MITgcm 
 
 # set up size of your grid
 # running the 360x180 world in 16 quadrants in case something goes wrong midway
@@ -401,7 +396,7 @@ From the `/dar_one_docker/Dar_One/case_studies` directory, we can open the nitro
 vim nitrogen_fixers_build.jl
 ```
 
-You should see the same imports as before. The Darwin3 path is read from your saved preference.
+You should see the same imports as before.
 
 First we update our grid size to be 30x30
 ```
@@ -437,11 +432,9 @@ vim nitrogen_fixers_run.jl
 ```
 First up in the file is the import statements for Dar1 and other packages. 
 
-Next we do the typical set-up for a DAR1 run - set the path for MITgcm to point to where the MITgcm code is, choose a unique config name for the experiment, and set up the config object. 
+Next we do the typical set-up for a DAR1 run - choose a unique config name for the experiment, and set up the config object.
 
 ```
-# set path to MITgcm 
-
 # create and set up config 
 config_name = "n_30x30"
 config_obj, rundir = create_MITgcm_config(config_name)
