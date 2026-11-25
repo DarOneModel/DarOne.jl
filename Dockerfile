@@ -1,6 +1,6 @@
 FROM julia:1.10.13-bookworm
 
-ENV JULIA_PROJECT=/dar_one_docker/Dar_One \
+ENV JULIA_PROJECT=/dar_one_docker/DarOne.jl \
     DARONE_MITGCM_PATH=/dar_one_docker/darwin3 \
     JULIA_CPU_TARGET=generic
 WORKDIR /dar_one_docker
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && git config --global user.email "darone@localhost"
 
 # Use the same source/configuration revisions as the scientific CI.
-WORKDIR /dar_one_docker/Dar_One
+WORKDIR /dar_one_docker/DarOne.jl
 COPY darwin-sources.env ./
 RUN set -eu; \
     . ./darwin-sources.env; \

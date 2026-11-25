@@ -17,8 +17,8 @@ If you're using the `dar_one_docker`...
 - the MITgcm executable is included in the image (compiled during the Docker build when building from source)
     - the executable is called `mitgcmuv` and lives in the `darwin3/verification/dar_one_config/build` directory 
 - all the julia depencies have also been install already!
-    - if there are issues with dependencies not being installed, from the `Dar_One` folder run `julia --project=. -e 'using Pkg; Pkg.instantiate()'`
-- navigate to the `beginner_tutorial` folder using the command line (`# cd Dar_One/beginner_tutorial`)
+    - if there are issues with dependencies not being installed, from the `DarOne.jl` folder run `julia --project=. -e 'using Pkg; Pkg.instantiate()'`
+- navigate to the `beginner_tutorial` folder using the command line (`# cd DarOne.jl/beginner_tutorial`)
 
 If you're doing it locally... 
 - install julia dependencies

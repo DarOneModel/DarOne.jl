@@ -15,10 +15,10 @@ This guide to the case studies assumes you are using docker or otherwise working
 
 For each case study, there is a build file and a run file. These instructions will have you open each file, explain the contents, then close it and execute it with the `julia` command from the command line. 
 
-If you are using the docker, you can find the code for the case students in the `/dar_one_docker/Dar_One/case_studies` directory. 
+If you are using the docker, you can find the code for the case students in the `/dar_one_docker/DarOne.jl/case_studies` directory. 
 
 ```bash
-cd /dar_one_docker/Dar_One/case_studies
+cd /dar_one_docker/DarOne.jl/case_studies
 ls
 ```
 You should see the following six files listed. 
@@ -52,7 +52,7 @@ From the Docker command line, we can open up the bottle_experiment_build.jl file
 ```bash
 vim bottle_experiment_build.jl
 ```
-Reminder that we are in the `/dar_one_docker/Dar_One/case_studies` directory. Use the arrow keys to navigate the cursor around with vim, `i` to enter insert mode, `esc` to exit the mode, and `:q` to close the file. We will walk through all the code in this file before running it. 
+Reminder that we are in the `/dar_one_docker/DarOne.jl/case_studies` directory. Use the arrow keys to navigate the cursor around with vim, `i` to enter insert mode, `esc` to exit the mode, and `:q` to close the file. We will walk through all the code in this file before running it. 
 
 You will see these lines of code at the top of the file. 
 
@@ -241,7 +241,7 @@ First we will open and examine the `global_steadystate_build.jl` file.
 ```bash
 vim global_steadystate_build.jl
 ```
-Reminder that we are in the `/dar_one_docker/Dar_One/case_studies` directory.
+Reminder that we are in the `/dar_one_docker/DarOne.jl/case_studies` directory.
 
 The 360 x 160 matrix was divided in 16 parts, each 90 x 40. After running, the 16 tiles were stitched together again. Prior to building, we specify this grid size, and make sure all nutients are allowed to cycle normally (i.e. the available amount in the water is not held constant)
 
@@ -390,7 +390,7 @@ This is the experiment that inspired the ability to hold the nutients readily av
 We will run a 30x30 grid of DarOne instances each initialized with the same plankton community and nutrients, with the exception of nitrate and phosphate. Nitrate levels in each grid cell will increase along one axis, while phosphate levels will increase along the y-axis. Nutrient values are grabbed from the MITgcm Darwin output, but with iron at 100x and all other nutrients at 10x, and other sources of nitrogen besides NO3 (NO2, NH4, and DON) set to zero. The goal is to flood the system with nutrients, making sure it that nitogen and phosphate are the limiting factors. The simulation is run forward for 5 years with the average of the last year taken to represent the steady state result. 
 
 ## Code Walkthrough 
-From the `/dar_one_docker/Dar_One/case_studies` directory, we can open the nitrogen_fixers_build.jl file with vim. Because we are changing the number of grid cells we are running, we have to build the model again with these new dimensions. 
+From the `/dar_one_docker/DarOne.jl/case_studies` directory, we can open the nitrogen_fixers_build.jl file with vim. Because we are changing the number of grid cells we are running, we have to build the model again with these new dimensions. 
 
 ```bash
 vim nitrogen_fixers_build.jl
