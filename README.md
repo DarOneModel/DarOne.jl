@@ -24,7 +24,6 @@ Documentation for the darwin3 MITgcm fortran model can be found [here](https://d
 DarOne.jl is a tool for designing and running experiments simulating the marine microbiome within a single cube of water. The biogeochemical forcing is powered by the [MIT Darwin Model](https://darwinproject.mit.edu/), and DarOne.jl provides a Julia interface to build, configure, and run experiments with a simple, streamlined workflow. DarOne.jl is composed of two main parts:
 
 - [DarOne.jl](https://github.com/DarOneModel/DarOne.jl) - Julia interface for organizing experiments and setting up parameters for model runs
-    - Configure the Darwin3 checkout once with `set_darwin_path(path)`; Preferences.jl remembers it for subsequent Julia sessions
 - [darwin3](https://github.com/darwinproject/darwin3) - MITgcm source code set up to include all things Darwin 
     - `DarOne_config` - folder for the base configuration files for DarOne, which lives in the darwin3/verification/ folder. ([DarOne_config github](https://github.com/barbara42/dar_one_config))
 
@@ -41,17 +40,17 @@ DarOne can be run in one of two ways.
 - Run the docker application, which will start up the docker "daemon" 
 - The docker daemon must be running in order to download the DarOne image
 
-(2) Get the [DarOne docker image](https://hub.docker.com/r/birdy1123/dar1).
+(2) Get the DarOne Docker image from GitHub Container Registry.
 - using the command line, run 
 
-    `docker pull birdy1123/dar1`
+    `docker pull ghcr.io/daronemodel/darone:main`
 
-- If you go to the "Images" tab in the docker desktop UI, you should see "birdy1123/dar1"
+- If you go to the "Images" tab in the docker desktop UI, you should see "ghcr.io/daronemodel/darone:main"
 
 (3) Run a container based on the DarOne docker image
 - using the command line, run 
 
-    `docker run -it birdy1123/dar1` 
+    `docker run -it ghcr.io/daronemodel/darone:main`
 - this runs the container in interactive mode (`-i`) with terminal access (`-t`) 
 - you should see the prompt change to `root@some-number:/dar_one_docker#`
     - if the container is already running, you can connect to it with `docker exec -it [CONTAINER_ID] bash`
