@@ -270,7 +270,7 @@ end
     create_MITgcm_config(config_id)
 
 Arguments:
-- config_id: unique name for your dar_one run  
+- config_id: unique name for your DarOne run  
 
 Returns
 - config_obj::MITgcm_config

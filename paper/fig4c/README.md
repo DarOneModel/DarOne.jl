@@ -24,7 +24,7 @@ build tools also require Python 3.11 (their Cog generator uses the removed
 `imp` module), so keep this environment active during the model build:
 
 ```bash
-cd ~/Dar_One
+cd ~/DarOne.jl
 conda env create -f paper/fig4c/environment.yml
 conda activate darone-fig4c
 
@@ -43,7 +43,7 @@ checkout, the commands below reproduce the source revisions used by CI,
 recorded in [`darwin-sources.env`](../../darwin-sources.env):
 
 ```bash
-cd ~/Dar_One
+cd ~/DarOne.jl
 set -a
 . ./darwin-sources.env
 set +a
@@ -85,7 +85,7 @@ Check that `DARONE_MITGCM_PATH` is still set in this terminal. Build the
 Bray-Curtis field:
 
 ```bash
-cd ~/Dar_One
+cd ~/DarOne.jl
 julia --project=. case_studies/global_steadystate_build.jl && \
 DARONE_EXAMPLE_ITERATIONS=28800 JULIA_NUM_THREADS=4 \
   bash paper/fig4c/run_bray_curtis_tiles.sh "$HOME/darone-fig4c" && \

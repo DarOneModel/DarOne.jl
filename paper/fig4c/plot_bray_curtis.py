@@ -1,4 +1,4 @@
-"""Reproduce the paper's Figure 4C from 16 DAR1 tiles and the Darwin reference."""
+"""Reproduce the paper's Figure 4C from 16 DarOne tiles and the Darwin reference."""
 
 import os
 import sys

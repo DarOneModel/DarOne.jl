@@ -22,9 +22,9 @@ If you're using the `dar_one_docker`...
 
 If you're doing it locally... 
 - install julia dependencies
-    - from the `Dar_One` folder run `julia --project=. -e 'using Pkg; Pkg.instantiate()'` 
+    - from the `DarOne.jl` folder run `julia --project=. -e 'using Pkg; Pkg.instantiate()'` 
 - configure the Darwin3 path once as described in [local setup](../README.md#setting-up-on-local-machine)
-- from the `Dar_One` folder run `julia --project=. beginner_tutorial/1_build_example.jl`
+- from the `DarOne.jl` folder run `julia --project=. beginner_tutorial/1_build_example.jl`
 
 ## Setting up run folders 
 
@@ -69,7 +69,7 @@ Awesome! Now we have a `config_obj` that points to all the files and folders nee
 
 For a full list of parameters to modify, including more in-depth descriptions, see [DOCUMENTAION](https://daronemodel.github.io/DarOne.jl/build/darwin_background).
 
-Whenever you update a parameter, the function first takes in the `config_obj` of type `MITgcm_config` that we created in the previous step. This tells `Dar_One` where the files are that we are 
+Whenever you update a parameter, the function first takes in the `config_obj` of type `MITgcm_config` that we created in the previous step. This tells `DarOne` where the files are that we are 
 aiming to modify. 
 
 For this tutorial, we are keeping it simple. First, we are going to specify how long the model will run by setting the end time. 
@@ -84,7 +84,7 @@ Next we will set the temperature to a constant value.
 new_temp = 30 # celius
 update_temperature(config_obj, new_temp)
 ```
-`Dar_One` by default doesn't have many nutrients available, only salinity, alkalinity, and oxygen 
+`DarOne` by default doesn't have many nutrients available, only salinity, alkalinity, and oxygen 
 are initialized. We need to add in starting nutrient concentrations, so our little plankton 
 don't die off. We're going to set the initial concentrations of nitrate (NO3), phosphate (PO4), and iron (FeT) using the following code. These values are in mmol per m^3. These values were chosen 
 by looking at the range of nutrient concentrations we see in the Northern Pacific gyre.  
@@ -150,7 +150,7 @@ Let's move inside this folder and look at its contents.
 
 `# ls` 
 
-Here's all our output, in [netCDF](https://www.unidata.ucar.edu/software/netcdf/) form! You can tell by the `.nc` filetype extension at the end of each file name. Each of these files contains different information about whats going on inside `Dar_One`, but for now **we are just going to focus on the `3d.some_number.nc` file.** (For a more in-depth description of all the forms of output we get, see [DOCUMENTATION](https://daronemodel.github.io/DarOne.jl/build/darwin_background/))
+Here's all our output, in [netCDF](https://www.unidata.ucar.edu/software/netcdf/) form! You can tell by the `.nc` filetype extension at the end of each file name. Each of these files contains different information about whats going on inside `DarOne`, but for now **we are just going to focus on the `3d.some_number.nc` file.** (For a more in-depth description of all the forms of output we get, see [DOCUMENTATION](https://daronemodel.github.io/DarOne.jl/build/darwin_background/))
 
 The `3d.nc` file contains information about nutrient levels and the biomass of all the phytoplankton types. 
 
